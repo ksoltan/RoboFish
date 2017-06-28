@@ -3,22 +3,23 @@ function tests = joint_deflection_tests
     tests = functiontests(localfunctions);
 end
 
-%% RMS Error Tests WHEN GET_POSTURE IS SIN(X)
+%% RMS Error Tests
 function testRootMeanSquareErrorBetterThanVertical(testCase)
-    vertical = root_mean_square_error([1, 1], [1, 5]);
-    diagonal = root_mean_square_error([1, 1], [1 + 4/sqrt(2), 1 + 4/sqrt(2)]);
+    vertical = root_mean_square_error([1, 1], [1, 5], 1);
+    diagonal = root_mean_square_error([1, 1], [1 + 4/sqrt(2), 1 + 4/sqrt(2)], 1);
     verifyLessThan(testCase, diagonal, vertical)
 end
 
+% PASSES WHEN GET_POSTURE IS SIN(X)
 function testRootMeanSquareErrorBetterThanHorizontal(testCase)
-    better = root_mean_square_error([0, 0], [pi/2, 1]);
-    worse = root_mean_square_error([0, 0], [sqrt(1 + pi^2 / 4), 0]);
+    better = root_mean_square_error([0, 0], [pi/2, 1], 1);
+    worse = root_mean_square_error([0, 0], [sqrt(1 + pi^2 / 4), 0], 1);
     verifyLessThan(testCase, better, worse)
 end
 
 function testRootMeanSquareError(testCase)
-    worse = root_mean_square_error([0, 0], [pi/2, 1]);
-    best = root_mean_square_error([0, 0], [sqrt(1/2 + pi^2/8), sqrt(1/2 + pi^2/8)]);
+    worse = root_mean_square_error([0, 0], [pi/2, 1], 1);
+    best = root_mean_square_error([0, 0], [sqrt(1/2 + pi^2/8), sqrt(1/2 + pi^2/8)], 1);
     verifyLessThan(testCase, best, worse)
 end
 
