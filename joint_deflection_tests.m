@@ -6,20 +6,20 @@ end
 %% Test Deflections Angle Greater
 function testIsDeflectionAngleGreaterFalseSin(testCase)
     ss = @(x, t) sin(x);
-    actSolution = is_deflection_angle_greater(50, [0, 0], [pi/2, 1], 1, ss);
-    verifyFalse(testCase, actSolution);
+    actSolution = get_deflection_angle([0, 0], [pi/2, 1], 1, ss);
+    verifyLessThan(testCase, actSolution, 50);
 end
 
 function testIsDeflectionAngleGreaterFalseOnLine(testCase)
     ss = @(x, t) x;
-    actSolution = is_deflection_angle_greater(50, [0, 0], [55, 55], 1, ss);
-    verifyFalse(testCase, actSolution);
+    actSolution = get_deflection_angle([0, 0], [55, 55], 1, ss);
+    verifyLessThan(testCase, actSolution, 50);
 end
 
 function testIsDeflectionAngleGreaterTrueOnLine(testCase)
     ss = @(x, t) x;
-    actSolution = is_deflection_angle_greater(40, [0, 2], [2, 2], 1, ss);
-    verifyTrue(testCase, actSolution);
+    actSolution = get_deflection_angle([0, 2], [2, 2], 1, ss);
+    verifyGreaterThan(testCase, actSolution, 40);
 end
 
 % Set K in joint_variables to 1
@@ -52,6 +52,8 @@ end
 
 % 
 %% Discretize Posture Test Lengths
+% When graphing on axis that are not symmetric, can look like joints are
+% changing length. These tests should prove that they do not.
 function testDiscretizePostureLengths(testCase)
     joint_points = discretize_posture([0.3, 0.3, 0.3, 0.3], 1.8, @mean_error, @get_posture);
     base = joint_points(1, :);

@@ -25,7 +25,9 @@ while j <= K % Loop through every joint. Could write this recursively
     while get_distance(base_pt, [x_cross, y_cross]) <= length_j
        % for each possible cross point, calculate the end point
        % Check that the cross point does not produce too big of an angle
-       if(~is_deflection_angle_greater(60, base_pt, [x_cross, y_cross], t, posture_func))
+       % Can be changed to salvage joint if cannot solve to be less than
+       % angle
+       if(get_deflection_angle(base_pt, [x_cross, y_cross], t, posture_func) < 60)
            end_pt = get_end_point(base_pt, [x_cross, y_cross], length_j);
            % determine the error that this end point produces. If it is less
            % than the previous one, save this as best end pt

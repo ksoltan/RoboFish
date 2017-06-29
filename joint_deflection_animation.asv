@@ -14,9 +14,7 @@ clc;
 time = 0 : 0.007: 3;
 hFigure = figure;
 numberOfFrames = length(time);
-
-saveMovie = false; % Set to true if you want to save an avi file. Don't forget to change name of file
-movie_file_name = 'second_pass_tail.avi';
+saveMovie = false;
 
 % Set up the movie structure.
 % Preallocate recalledMovie, which will be an array of structures.
@@ -32,7 +30,7 @@ allTheColorMaps(:) = {zeros(256, 2)};
 myMovie = struct('cdata', allTheFrames, 'colormap', allTheColorMaps);
 if(saveMovie)
     % Create a VideoWriter object to write the video out to a new, different file.
-    writerObj = VideoWriter(movie_file_name);
+    writerObj = VideoWriter('second_pass_tail.avi');
     open(writerObj);
 end
 
@@ -63,10 +61,8 @@ for frameIndex = 1 : numberOfFrames
     end
 	myMovie(frameIndex) = thisFrame;
 end
-
 if(saveMovie)
-    close(writerObj);
-end
+% close(writerObj);end
 
 message = sprintf('Done creating movie\nDo you want to play it?');
 button = questdlg(message, 'Continue?', 'Yes', 'No', 'Yes');
