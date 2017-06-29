@@ -31,4 +31,9 @@ function pt = get_end_point(base_pt, cross_pt, length_j)
         end
         pt = pt + base_pt; % pt was calculated as if from origin, now shift to base_pt
     end
+%     figure;
+%     hold on;
+%     plot([base_x, cross_x, pt(1)], [base_y, cross_y, pt(2)], 'r*-')
+%     xs = pt(1) : 0.01 : base_x
+%     plot(xs, get_posture(xs, 1), 'b')
 end

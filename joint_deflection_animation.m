@@ -11,7 +11,7 @@ function joint_deflection_animation()
 clear all;
 clc;
 % Length and resolution of animation
-time = 0 : 0.01: 2;
+time = 0 : 0.007: 3;
 hFigure = figure;
 numberOfFrames = length(time);
 
@@ -29,32 +29,34 @@ allTheColorMaps(:) = {zeros(256, 2)};
 myMovie = struct('cdata', allTheFrames, 'colormap', allTheColorMaps);
 
 % Create a VideoWriter object to write the video out to a new, different file.
-% writerObj = VideoWriter('first_pass_tail.avi');
-% open(writerObj);
+writerObj = VideoWriter('second_pass_tail.avi');
+open(writerObj);
 % Need to change from the default renderer to zbuffer to get it to work right.
 % openGL doesn't work and Painters is way too slow.
 set(gcf, 'renderer', 'zbuffer');
 	
 for frameIndex = 1 : numberOfFrames
 	t = time(frameIndex);
-	joint_points = discretize_posture([0.3, 0.3, 0.3, 0.3], t);
-    xs = 0 : 0.001 : joint_points(end, 1);
+	joint_points = discretize_posture([0.3, 0.3, 0.3, 0.3], t, @mean_error, @get_posture);
+    joint_points2 = discretize_posture([0.3, 0.3, 0.3, 0.3], t, @root_mean_square_error, @get_posture);
+    xs = 0 : 0.001 : 0.3*4;
     cla reset;
 	% Enlarge figure to full screen.
 % 	set(gcf, 'Units', 'Normalized', 'Outerposition', [0, 0, 1, 1]);
     hold on;
     plot(xs, get_posture(xs, t), 'b')
     plot(joint_points(:, 1), joint_points(:, 2), 'r*-');
+    plot(joint_points2(:, 1), joint_points2(:, 2), 'g*-');
     axis([0, 1, -0.8, 0.8])
 	caption = sprintf('Frame #%d of %d, t = %.1f', frameIndex, numberOfFrames, time(frameIndex));
 	title(caption, 'FontSize', 15);
 	drawnow;
 	thisFrame = getframe(gca);
 	% Write this frame out to a new video file.
-%  	writeVideo(writerObj, thisFrame);
+ 	writeVideo(writerObj, thisFrame);
 	myMovie(frameIndex) = thisFrame;
 end
-% close(writerObj);
+close(writerObj);
 message = sprintf('Done creating movie\nDo you want to play it?');
 button = questdlg(message, 'Continue?', 'Yes', 'No', 'Yes');
 drawnow;	% Refresh screen to get rid of dialog box remnants.

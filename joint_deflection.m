@@ -10,7 +10,7 @@ function joint_deflection()
     hold on;
     axis([0, 1, -0.8, 0.8])
     for t = 0 : 0.01 : 1.4
-        joint_points = discretize_posture([0.3, 0.3, 0.3, 0.3], t);
+        joint_points = discretize_posture([0.3, 0.3, 0.3, 0.3], t, @mean_error, @get_posture);
         xs = 0 : 0.001 : joint_points(end, 1);
         plot(xs, get_posture(xs, t), 'b')
         plot(joint_points(:, 1), joint_points(:, 2), 'r*-');
