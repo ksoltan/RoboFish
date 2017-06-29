@@ -7,5 +7,5 @@
 % Base point of 0th linkage is 0
 M = 2;
 i = 0 : 1 : M;
-K = 4;
+K = 2;
 j = 0 : 1 : K;

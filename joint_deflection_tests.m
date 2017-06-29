@@ -58,7 +58,6 @@ function testDiscretizePostureLengths(testCase)
     joint_points = discretize_posture([0.3, 0.3, 0.3, 0.3], 1.8, @mean_error, @get_posture);
     base = joint_points(1, :);
     for i = 2 : length(joint_points)
-        disp(i)
         end_pt = joint_points(i, :);
         mag = sqrt((base(1) - end_pt(1))^2 + (base(2) - end_pt(2))^2);
         base = end_pt;
@@ -71,13 +70,24 @@ function testDiscretizePostureLengthsAll(testCase)
         joint_points = discretize_posture([0.3, 0.3, 0.3, 0.3], t, @mean_error, @get_posture);
         base = joint_points(1, :);
         for i = 2 : length(joint_points)
-            disp(i)
             end_pt = joint_points(i, :);
             mag = sqrt((base(1) - end_pt(1))^2 + (base(2) - end_pt(2))^2);
             base = end_pt;
            verifyLessThan(testCase, abs(mag - 0.3), 0.0001);
         end
     end
+end
+
+%% Get Angle Tests
+function testGetAngle(testCase)
+    act1 = get_angle([1, 1], [2, 2]);
+    act2 = get_angle([1, 1], [0, 0]);
+    act3 = get_angle([2, 2*sqrt(3)], [-2, 2*sqrt(3)]);
+    act4 = get_angle([-1, 2*sqrt(3)], [2, 2*sqrt(3)]);
+    verifyEqual(testCase, act1, 45);
+    verifyEqual(testCase, act2, -45);
+    verifyEqual(testCase, act3, 180);
+    verifyEqual(testCase, act4, 0);
 end
         
         

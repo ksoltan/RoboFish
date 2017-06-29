@@ -1,6 +1,4 @@
 function y = get_posture(x, t)
-    % SHOULD INCLUDE WAY TO CHOOSE WHICH POSTURE
-    y = sin(x);
     c1 = 0.45;
     c2 = 0;
     k = 5;

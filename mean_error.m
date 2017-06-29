@@ -4,7 +4,6 @@ function error = mean_error(base_pt, end_pt, t, posture_func)
     % posture is a function, it cannot be vertical
     if(abs(base_pt(1) - end_pt(1)) < 0.001)
         error = inf;
-        disp('oops');
     else
         dx = 0.005;
         x = base_pt(1) : dx : end_pt(1);

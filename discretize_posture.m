@@ -15,7 +15,7 @@ base_pt = [0, 0];
 end_pt_best = [0, 0];
 error = inf;
 while j <= K % Loop through every joint. Could write this recursively
-    disp(j)
+%     disp(j)
     length_j = joint_lengths(j);
     % Define the first possible cross point as exactly vertical. This is
     % only a starting point, the current program does not allow vertical
