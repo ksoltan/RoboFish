@@ -1,5 +1,0 @@
-function res = is_deflection_angle_greater(angle, base_pt, cross_pt, posture_func, t   % Estimate instantaneous slope at cross pt in posture func
-    pt = posture_func()
-    res = false;
-    
-end
