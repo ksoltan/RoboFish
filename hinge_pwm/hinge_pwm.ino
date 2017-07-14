@@ -9,11 +9,14 @@ int LED = 13;
 int head_r = 3;
 int head_l = 5;
 int joint2_r = 6;
-int joint3_l = 9;
+int joint2_l = 9;
 int joint3_r = 10;
 int joint3_l = 11;
-int tail_r = A2; // Tail will for now be controlled bang-bang. Can implement pwm on it if necessary.
-int tail_l = A3;
+int tail_r = 16; // A2 // Tail will for now be controlled bang-bang. Can implement pwm on it if necessary.
+int tail_l = 17; // A3
+int RIGHT = 1;
+int LEFT = 0;
+int dir_head = RIGHT; // The direction of the head will dictate direction of all other joints.
 
 void setup()
 {
@@ -22,68 +25,57 @@ void setup()
   pinMode(tail_l, OUTPUT);
 }
 
+// Because a slight movement will theoretically change the course, take in both direction want joint to go in and the amplitude.
+// In this way, if it is already going right but you want a less sharp angle, you can pass right and a smaller duty cycle.
+// Abstracted to any joint because they all take the same commands except for the tail.
+void moveJoint(int dir, int duty, int right, int left) {
+  static int pwm = (int)(255 * duty / 100); // get analogWrite value to execute duty cycle
+  if (dir == RIGHT) {
+    analogWrite(right, pwm);
+    analogWrite(left, 0);
+    digitalWrite(LED, HIGH);
+  } else {
+    analogWrite(right, 0);
+    analogWrite(left, pwm);
+    digitalWrite(LED, LOW);
+  }
+}
+
+void moveTail(int dir) {
+  if (dir == RIGHT) {
+    digitalWrite(tail_r, HIGH);
+    digitalWrite(tail_l, LOW);
+    digitalWrite(LED, HIGH);
+  } else {
+    digitalWrite(tail_r, LOW);
+    digitalWrite(tail_l, HIGH);
+    digitalWrite(LED, LOW);
+  }
+}
+
+static uint32_t last_head_change = 0;
 
 // MAIN LOOP DEFINING THE ROBOTS BEHAVIOR
 void loop()
 {
-   static uint32_t last_changed = 0;
-
-    if (millis() < last_changed + 4000)
-    {
-      caudal_fin_function(1000);
-    }
-    
-//    else if (millis() < last_changed + 8000)
-//    {
-//      caudal_fin_function(500);     
-//    }
-//    else if (millis() < last_changed + 12000)
-//    {
-//      caudal_fin_function(250);     
-//    }
-    else
-    {
-      last_changed = millis();
-    }
+  if (millis() < last_head_change + 1000) // change head every 1s
+  {
+    dir_head = (dir_head == RIGHT) ? LEFT : RIGHT; // change the direction of the head
+    moveJoint(dir_head, 100, head_r, head_l); // move the head
+    last_head_change = millis(); // Update time last changed head
+  }
+  checkToMoveJoints();
 }
 
-// PROPULSION FUNCTIONS
-void caudal_fin_function(int f)
-{
-  static int dir = 0;
-  static uint32_t last_changed = 0;
-  static int duty = 100;
-  static int pwm = (int)(255 * duty / 100);
-  
-  if (millis() > last_changed + f)
-  {
-    if (dir)
-    {
-      analogWrite(head_r, pwm);
-      analogWrite(head_l, 0);
-      analogWrite(joint2_r, pwm);
-      analogWrite(joint2_l, 0);
-      analogWrite(joint3_r, pwm);
-      analogWrite(joint3_l, 0);
-      digitalWrite(tail_r, HIGH);
-      digitalWrite(tail_l, LOW); 
-      digitalWrite(LED, HIGH);
-    }
-    else
-    {
-      analogWrite(head_r, 0);
-      analogWrite(head_l, pwm);
-      analogWrite(joint2_r, 0);
-      analogWrite(joint2_l, pwm);
-      analogWrite(joint3_r, 0);
-      analogWrite(joint3_l, pwm);
-      digitalWrite(tail_r, LOW);
-      digitalWrite(tail_l, HIGH);
-      digitalWrite(LED, LOW);
-    }
-
-    dir = 1 - dir;
-
-    last_changed = millis();
+// Not efficient move function unless want to vary duty cycle on a joint in the interval
+// between when it should move and the next joint needs to move.
+void checkToMoveJoints(){
+  if(millis() > last_head_change + 750){ // within this interval, until head moves again, keep resending the same move function (doesn't change anything after the first time)
+    moveTail(dir_head);
+  } else if(millis() > last_head_change + 500){
+    moveJoint(dir_head, 100, joint3_r, joint3_l);
+  } else if(millis() > last_head_change + 250){
+    moveJoint(dir_head, 100, joint2_r, joint2_l);
   }
 }
+
