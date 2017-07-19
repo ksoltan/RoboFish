@@ -32,9 +32,9 @@ void loop()
 {
   static uint32_t last_changed = 0;
   if (millis() - last_changed > 500) {
-    Serial.print("Joint: ");
-    Serial.print(joint_to_move);
-    Serial.print("\n");
+//    Serial.print("Joint: ");
+//    Serial.print(joint_to_move);
+//    Serial.print("\n");
     moveNextJoint();
     last_changed = millis();
     joint_to_move = (joint_to_move + 1) % NUM_JOINTS; // make it loop back from 3 to 0.
@@ -79,10 +79,24 @@ void moveNextJoint() {
   // flap fin in opposite direction, currently at full amplitude
   flap(1 - curr_dir, 100);
   // update the joint's direction. Current joint to move is updated in loop.
-  Serial.print("XOR With: ");
-  Serial.print((int)(pow(2, joint_to_move) + 0.5), BIN);
-  Serial.print("\n");
+//  Serial.print("XOR With: ");
+//  Serial.print((int)(pow(2, joint_to_move) + 0.5), BIN);
+//  Serial.print("\n");
   joint_directions = joint_directions ^ (uint8_t)(pow(2, joint_to_move)+0.5);
-  Serial.println(joint_directions, BIN);
+  printJointPos();
+//  Serial.println(joint_directions, BIN);
+}
+
+void printJointPos(){
+  for(int i = 0; i < NUM_JOINTS; i++){
+    int dir = (joint_directions >> i) & 1;
+    if(dir){
+      // Right
+      Serial.print("\\");
+    }else{
+      Serial.print("/");
+    }
+  }
+  Serial.print("\n");
 }
 
