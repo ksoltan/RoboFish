@@ -42,24 +42,24 @@ set(gcf, 'renderer', 'zbuffer');
 	
 for frameIndex = 1 : numberOfFrames
 	t = time(frameIndex);
-	joint_points = discretize_posture([0.3, 0.3, 0.3, 0.3], t, @mean_error, @get_posture);
-    joint_points2 = discretize_posture([0.3, 0.3, 0.3, 0.3], t, @root_mean_square_error, @get_posture);
-    xs = 0 : 0.001 : 0.3*4;
+	joint_points = discretize_posture([6.28, 4.796, 4.28, 7.219], t, @mean_error, @get_posture);
+%     joint_points2 = discretize_posture([6.28, 4.796, 4.28, 7.219], t, @root_mean_square_error, @get_posture);
+    xs = 0 : 0.001 : 20;
     cla reset;
 	% Enlarge figure to full screen.
 % 	set(gcf, 'Units', 'Normalized', 'Outerposition', [0, 0, 1, 1]);
     hold on;
     plot(xs, get_posture(xs, t), 'b')
     plot(joint_points(:, 1), joint_points(:, 2), 'r*-');
-    plot(joint_points2(:, 1), joint_points2(:, 2), 'g*-');
-    axis([0, 1, -0.8, 0.8])
+%     plot(joint_points2(:, 1), joint_points2(:, 2), 'g*-');
+    axis([0, 30, -15, 15])
 	caption = sprintf('Frame #%d of %d, t = %.1f', frameIndex, numberOfFrames, time(frameIndex));
 	title(caption, 'FontSize', 15);
 	drawnow;
 	thisFrame = getframe(gca);
 	% Write this frame out to a new video file.
     if(saveMovie)
-     	writeVideo(writerObj, thisFrame);    
+     	writeVideo(writerObj, thisFrame);
     end
 	myMovie(frameIndex) = thisFrame;
 end

@@ -3,24 +3,19 @@ function tests = joint_deflection_tests
     tests = functiontests(localfunctions);
 end
 
-%% Test Deflections Angle Greater
-function testIsDeflectionAngleGreaterFalseSin(testCase)
-    ss = @(x, t) sin(x);
-    actSolution = get_deflection_angle([0, 0], [pi/2, 1], 1, ss);
-    verifyLessThan(testCase, actSolution, 50);
+%% Test Deflection Angle from Previous Joint
+
+function testDeflectionAngle(testCase)
+    act1 = get_deflection_angle([-sqrt(3)/2, -1/2],[0, 0],[sqrt(2), sqrt(2)]);
+    verifyLessThan(testCase, abs(act1 - 15), 0.0001);
+    act2 = get_deflection_angle([-sqrt(3)/2, -1/2],[0, 0],[sqrt(2), -sqrt(2)]);
+    verifyLessThan(testCase, abs(act2 + 75), 0.0001);
+    act3 = get_deflection_angle([-sqrt(2), sqrt(2)],[0, 0],[sqrt(3)/2, 1/2]);
+    verifyLessThan(testCase, abs(act3 - 75), 0.0001);
+    act4 = get_deflection_angle([-sqrt(2), sqrt(2)],[0, 0],[-1/2, -sqrt(3)/2]);
+    verifyLessThan(testCase, abs(act4 + 75), 0.0001);
 end
 
-function testIsDeflectionAngleGreaterFalseOnLine(testCase)
-    ss = @(x, t) x;
-    actSolution = get_deflection_angle([0, 0], [55, 55], 1, ss);
-    verifyLessThan(testCase, actSolution, 50);
-end
-
-function testIsDeflectionAngleGreaterTrueOnLine(testCase)
-    ss = @(x, t) x;
-    actSolution = get_deflection_angle([0, 2], [2, 2], 1, ss);
-    verifyGreaterThan(testCase, actSolution, 40);
-end
 
 % Set K in joint_variables to 1
 % function testMeanErrorGetOneHorizHinge(testCase)
@@ -85,11 +80,22 @@ function testGetAngle(testCase)
     act3 = get_angle([2, 2*sqrt(3)], [-2, 2*sqrt(3)]);
     act4 = get_angle([-1, 2*sqrt(3)], [2, 2*sqrt(3)]);
     verifyEqual(testCase, act1, 45);
-    verifyEqual(testCase, act2, -45);
+    verifyEqual(testCase, act2, -135);
     verifyEqual(testCase, act3, 180);
     verifyEqual(testCase, act4, 0);
 end
-        
+
+function testGetAnglesSecondThirdQuadrant(testCase)
+    act1 = get_angle([0, 0],[1/2, sqrt(3)/2]); % First quadrant check
+    verifyLessThan(testCase, abs(act1 - 60), 0.0001);
+    act2 = get_angle([0, 0],[-1/2, sqrt(3)/2]); % = 120
+    verifyLessThan(testCase, abs(act2 - 120), 0.0001);
+    act3 = get_angle([0, 0],[-1/2, -sqrt(3)/2]); % = -120
+    verifyLessThan(testCase, abs(act3 + 120), 0.0001);
+    act4 = get_angle([0, 0],[1/2, -sqrt(3)/2]); % = -60
+    verifyLessThan(testCase, abs(act4 + 60), 0.0001);
+%     verifyLessThan(testCase, abs(actSolution - expSolution), 0.0001)
+end
         
 %% Mean Error Tests
 function testMeanErrorBetterThanVertical(testCase)

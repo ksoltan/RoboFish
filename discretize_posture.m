@@ -2,7 +2,6 @@ function joint_points = discretize_posture(joint_lengths, t, error_func, posture
 % Given a posture (a time and the tail function) and the lengths of joints, 
 % return a list of points that define the base and end points of the joints
 % SHOULD INCLUDE REFERENCE TO WHICH POSTURE IT WANTS
-    
 
 %% May need to take this out if calling in joint_deflection and it also initializes globals
 joint_variables; % Initialize global variables
@@ -27,7 +26,7 @@ while j <= K % Loop through every joint. Could write this recursively
        % Check that the cross point does not produce too big of an angle
        % Can be changed to salvage joint if cannot solve to be less than
        % angle
-       if(get_deflection_angle(base_pt, [x_cross, y_cross], t, posture_func) < 60)
+       if(j > 1 && get_deflection_angle(joint_points(j - 1, :), base_pt, [x_cross, y_cross]) < 50)
            end_pt = get_end_point(base_pt, [x_cross, y_cross], length_j);
            % determine the error that this end point produces. If it is less
            % than the previous one, save this as best end pt
@@ -38,8 +37,8 @@ while j <= K % Loop through every joint. Could write this recursively
            end
        end
         % Increment x_cross and update y_cross to get next cross point
-        x_cross = x_cross + 0.01;
-        y_cross = posture_func(x_cross, t);
+        x_cross = x_cross + 0.01; % Incrementation only goes forward to prevent joint from bending backwards
+        y_cross = posture_func(x_cross, t); % Cross point lies on the function
     end
     % Add the best end_pt to the list of points and set it as the base pt.
     joint_points(j + 1, :) = end_pt_best;
