@@ -11,12 +11,12 @@ function joint_deflection_animation()
 clear all;
 clc;
 % Length and resolution of animation
-time = 0 : 0.007: 3;
+time = 0 : 0.007: 2;
 hFigure = figure;
 numberOfFrames = length(time);
 
-saveMovie = false; % Set to true if you want to save an avi file. Don't forget to change name of file
-movie_file_name = 'second_pass_tail.avi';
+saveMovie = true;% Set to true if you want to save an avi file. Don't forget to change name of file
+movie_file_name = 'tail_with_quiver.avi';
 
 % Set up the movie structure.
 % Preallocate recalledMovie, which will be an array of structures.
@@ -50,9 +50,29 @@ for frameIndex = 1 : numberOfFrames
 % 	set(gcf, 'Units', 'Normalized', 'Outerposition', [0, 0, 1, 1]);
     hold on;
     plot(xs, get_posture(xs, t), 'b')
+    
+    % Plot normal lines along motion function, from 
+    % https://stackoverflow.com/questions/17324936/how-to-find-the-normal-vector-at-a-point-on-a-curve-in-matlab
+    x = 0 : 3 : 20;
+    y = get_posture(x, t);
+    dy = gradient(y);
+    dx = gradient(x);
+    quiver(x, y, -dy, dx);
+
+    %Plot normal line for each joint
+    for joint = 1 : length(joint_points) - 1
+        num_points = 11;
+        xj = linspace(joint_points(joint, 1), joint_points(joint + 1, 1), num_points);
+        yj = linspace(joint_points(joint, 2), joint_points(joint + 1, 2), num_points);
+        dyj = 4*gradient(yj);
+        dxj = 4*gradient(xj);
+        middle_vec_idx = round(num_points / 2); % Only display the middle normal vector
+        quiver(xj(middle_vec_idx), yj(middle_vec_idx), -dyj(middle_vec_idx), dxj(middle_vec_idx), 'r', 'LineWidth', 2, 'MaxHeadSize', 1);
+    end
     plot(joint_points(:, 1), joint_points(:, 2), 'r*-');
+    
 %     plot(joint_points2(:, 1), joint_points2(:, 2), 'g*-');
-    axis([0, 30, -15, 15])
+    axis([0, 40, -20, 20])
 	caption = sprintf('Frame #%d of %d, t = %.1f', frameIndex, numberOfFrames, time(frameIndex));
 	title(caption, 'FontSize', 15);
 	drawnow;
@@ -83,7 +103,7 @@ title('Playing the movie we created', 'FontSize', 15);
 axis off;
 % Play the movie.
 movie(myMovie);
-uiwait(helpdlg('Done with demo!'));
+uiwait(helpdlg('Done with demo!')); 
 close(hFigure);
 
 end
