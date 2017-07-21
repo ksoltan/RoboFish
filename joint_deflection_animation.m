@@ -49,7 +49,7 @@ for frameIndex = 1 : numberOfFrames
 	% Enlarge figure to full screen.
 % 	set(gcf, 'Units', 'Normalized', 'Outerposition', [0, 0, 1, 1]);
     hold on;
-    plot(xs, get_posture(xs, t), 'b')
+    postures = plot(xs, get_posture(xs, t), 'b', 'DisplayName','Posture Func');
     
     % Plot normal lines along motion function, from 
     % https://stackoverflow.com/questions/17324936/how-to-find-the-normal-vector-at-a-point-on-a-curve-in-matlab
@@ -69,7 +69,8 @@ for frameIndex = 1 : numberOfFrames
         middle_vec_idx = round(num_points / 2); % Only display the middle normal vector
         quiver(xj(middle_vec_idx), yj(middle_vec_idx), -dyj(middle_vec_idx), dxj(middle_vec_idx), 'r', 'LineWidth', 2, 'MaxHeadSize', 1);
     end
-    plot(joint_points(:, 1), joint_points(:, 2), 'r*-');
+    hinges = plot(joint_points(:, 1), joint_points(:, 2), 'r*-', 'DisplayName','Hinge Approx');
+    legend([postures, hinges])
     
 %     plot(joint_points2(:, 1), joint_points2(:, 2), 'g*-');
     axis([0, 40, -20, 20])
