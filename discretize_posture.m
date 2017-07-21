@@ -26,7 +26,7 @@ while j <= K % Loop through every joint. Could write this recursively
        % Check that the cross point does not produce too big of an angle
        % Can be changed to salvage joint if cannot solve to be less than
        % angle
-       if(j > 1 && get_deflection_angle(joint_points(j - 1, :), base_pt, [x_cross, y_cross]) < 50)
+       if(j == 1 || (j > 1 && get_deflection_angle(joint_points(j - 1, :), base_pt, [x_cross, y_cross]) < 50))
            end_pt = get_end_point(base_pt, [x_cross, y_cross], length_j);
            % determine the error that this end point produces. If it is less
            % than the previous one, save this as best end pt
