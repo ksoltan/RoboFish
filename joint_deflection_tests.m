@@ -1,6 +1,15 @@
 %% Main function to generate tests
+% To run, use command: results = runtests('joint_deflection_tests.m')
 function tests = joint_deflection_tests
     tests = functiontests(localfunctions);
+end
+
+%% Test Get All Deflection Angles
+function testGetAllDeflectionAngles(testCase)
+    j_points1 = [[-sqrt(3)/2, -1/2];[0, 0];[sqrt(2), sqrt(2)]];
+    j_points2 = [[-sqrt(3)/2, -1/2];[0, 0];[sqrt(2), sqrt(2)]; [sqrt(2), -sqrt(2)]; [0, 0]];
+    verifyLessThan(testCase, abs(get_all_deflection_angles(j_points1) - [15]), 0.0001);
+    verifyLessThan(testCase, abs(get_all_deflection_angles(j_points2) - [15, -135, 225]), 0.0001);
 end
 
 %% Test Deflection Angle from Previous Joint

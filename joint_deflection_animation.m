@@ -11,19 +11,21 @@ function joint_deflection_animation()
 clear all;
 clc;
 % Length and resolution of animation
-time = 0 : 0.007: 2;
+joint_variables;
+time = 0 : 0.007: 1;
 hFigure = figure;
 numberOfFrames = length(time);
+all_deflection_angles = zeros(numberOfFrames, K - 1);
 
-saveMovie = true;% Set to true if you want to save an avi file. Don't forget to change name of file
-movie_file_name = 'tail_with_quiver.avi';
+saveMovie = false;% Set to true if you want to save an avi file. Don't forget to change name of file
+movie_file_name = 'test_subplot2.avi';
 
 % Set up the movie structure.
 % Preallocate recalledMovie, which will be an array of structures.
 % First get a cell array with all the frames.
 allTheFrames = cell(numberOfFrames,1);
-vidHeight = 344;
-vidWidth = 446;
+vidHeight = 576;
+vidWidth = 1024;
 allTheFrames(:) = {zeros(vidHeight, vidWidth, 3, 'uint8')};
 % Next get a cell array with all the colormaps.
 allTheColorMaps = cell(numberOfFrames,1);
@@ -43,41 +45,57 @@ set(gcf, 'renderer', 'zbuffer');
 for frameIndex = 1 : numberOfFrames
 	t = time(frameIndex);
 	joint_points = discretize_posture([6.28, 4.796, 4.28, 7.219], t, @mean_error, @get_posture);
+    all_deflection_angles(frameIndex, :) = get_all_deflection_angles(joint_points);
 %     joint_points2 = discretize_posture([6.28, 4.796, 4.28, 7.219], t, @root_mean_square_error, @get_posture);
     xs = 0 : 0.001 : 20;
     cla reset;
 	% Enlarge figure to full screen.
 % 	set(gcf, 'Units', 'Normalized', 'Outerposition', [0, 0, 1, 1]);
+    
+    subplot(1, 2, 2);
+    hold on;
+    plot(time(1:frameIndex), all_deflection_angles(1:frameIndex, 1), 'b-')
+    plot(time(1:frameIndex), all_deflection_angles(1:frameIndex, 2), 'm-')
+    plot(time(1:frameIndex), all_deflection_angles(1:frameIndex, 3), 'r-')
+    axis([0, time(end), -60, 60])
+    
+    subplot(1, 2, 1);
     hold on;
     postures = plot(xs, get_posture(xs, t), 'b', 'DisplayName','Posture Func');
     
     % Plot normal lines along motion function, from 
     % https://stackoverflow.com/questions/17324936/how-to-find-the-normal-vector-at-a-point-on-a-curve-in-matlab
-    x = 0 : 3 : 20;
-    y = get_posture(x, t);
-    dy = gradient(y);
-    dx = gradient(x);
-    quiver(x, y, -dy, dx);
+%     x = 0 : 3 : 20;
+%     y = get_posture(x, t);
+%     dy = gradient(y);
+%     dx = gradient(x);
+%     quiver(x, y, -dy, dx);
 
-    %Plot normal line for each joint
-    for joint = 1 : length(joint_points) - 1
-        num_points = 11;
-        xj = linspace(joint_points(joint, 1), joint_points(joint + 1, 1), num_points);
-        yj = linspace(joint_points(joint, 2), joint_points(joint + 1, 2), num_points);
-        dyj = 4*gradient(yj);
-        dxj = 4*gradient(xj);
-        middle_vec_idx = round(num_points / 2); % Only display the middle normal vector
-        quiver(xj(middle_vec_idx), yj(middle_vec_idx), -dyj(middle_vec_idx), dxj(middle_vec_idx), 'r', 'LineWidth', 2, 'MaxHeadSize', 1);
-    end
-    hinges = plot(joint_points(:, 1), joint_points(:, 2), 'r*-', 'DisplayName','Hinge Approx');
-    legend([postures, hinges])
+%     %Plot normal line for each joint
+%     for joint = 1 : length(joint_points) - 1
+%         num_points = 11;
+%         xj = linspace(joint_points(joint, 1), joint_points(joint + 1, 1), num_points);
+%         yj = linspace(joint_points(joint, 2), joint_points(joint + 1, 2), num_points);
+%         dyj = 4*gradient(yj);
+%         dxj = 4*gradient(xj);
+%         middle_vec_idx = round(num_points / 2); % Only display the middle normal vector
+%         quiver(xj(middle_vec_idx), yj(middle_vec_idx), -dyj(middle_vec_idx), dxj(middle_vec_idx), 'r', 'LineWidth', 2, 'MaxHeadSize', 1);
+%     end
     
+    % Plot each joint intersection with a different color
+    hinges = plot(joint_points(:, 1), joint_points(:, 2), 'r*-', 'DisplayName','Hinge Approx');
+    head = plot(joint_points(2, 1), joint_points(2, 2), 'b.', 'MarkerSize', 30, 'DisplayName','Head Joint');
+    joint2 = plot(joint_points(3, 1), joint_points(3, 2), 'm.', 'MarkerSize', 30, 'DisplayName','Joint 2');
+    joint3 = plot(joint_points(4, 1), joint_points(4, 2), 'r.', 'MarkerSize', 30, 'DisplayName','Joint 3');
+%     legend([postures, hinges, head, joint2, joint3])
+    axis([0, 25, -20, 20])
+%     axis off
+    daspect([3 3 1])
 %     plot(joint_points2(:, 1), joint_points2(:, 2), 'g*-');
-    axis([0, 40, -20, 20])
 	caption = sprintf('Frame #%d of %d, t = %.1f', frameIndex, numberOfFrames, time(frameIndex));
-	title(caption, 'FontSize', 15);
+% 	title(caption, 'FontSize', 15);
 	drawnow;
-	thisFrame = getframe(gca);
+	thisFrame = getframe(hFigure);
 	% Write this frame out to a new video file.
     if(saveMovie)
      	writeVideo(writerObj, thisFrame);
@@ -98,7 +116,7 @@ if strcmpi(button, 'No')
 end
 hFigure = figure;
 % Enlarge figure to full screen.
-% set(gcf, 'Units', 'Normalized', 'Outerposition', [0, 0, 1, 1]);
+set(gcf, 'Units', 'Normalized', 'Outerposition', [0, 0, 1, 1]);
 title('Playing the movie we created', 'FontSize', 15);
 % Get rid of extra set of axes that it makes for some reason.
 axis off;
