@@ -32,23 +32,23 @@ function wave_chars = generate_deflection_sequence()
         
         [M, I] = max(abs(head_ft(1 : length(f)/2))); %https://www.mathworks.com/matlabcentral/answers/100813-how-do-i-find-the-indices-of-the-maximum-or-minimum-value-of-my-matrix
         freq = 2 * pi * f(I); % https://en.wikipedia.org/wiki/Sine_wave
-        phase = angle(head_ft(I)) + pi/2; % Added pi/2 shift because fits the line better. I don't know what causes that problem, wrapping?
+        phase = angle(head_ft(I)); % Use cos for this phase shift. If you want to use a sine wave, add +pi/2 to the phase.
         amplitude = max(all_deflection_angles(:, j));
         wave_chars(j, :) = [amplitude, freq, phase];
         subplot(3, 1, 3);
-        reconstructed = plot(time, amplitude * sin(freq * time + phase), 'DisplayName', 'Reconstructed Wave', 'LineWidth', 1.5); % Plot reconstructed wave
+        reconstructed = plot(time, amplitude * cos(freq * time + phase), 'DisplayName', 'Reconstructed Cos Wave', 'LineWidth', 1.5); % Plot reconstructed wave
         set(gca,'FontSize',12, 'FontName', 'Times'); % Set axis to times, 12
         hold on
         original = plot(time, all_deflection_angles(:, j), 'DisplayName', 'Original Wave', 'LineWidth', 1.5);
         legend([reconstructed, original])
         xlabel('Time (s)', 'FontSize', 14);
         ylabel('Deflection (deg)', 'FontSize', 14);
-        title('Joint Motion Reconstruction vs Original Approximation with Adjusted Phase (+\pi/2)', 'FontSize', 18)
-%         title('Joint Motion Reconstruction vs Original Approximation with Adjusted Phase (+', 'FontSize', 18);
+        title('Joint Motion Reconstruction vs Original Approximation', 'FontSize', 18)
+
     end
-%     figure(K);
-%     hold on;
-%     plot(time, wave_chars(1, 1) * sin(wave_chars(1, 2) * time + wave_chars(1, 3)), 'b')
-%     plot(time, wave_chars(2, 1) * sin(wave_chars(2, 2) * time + wave_chars(2, 3)), 'm')
-%     plot(time, wave_chars(3, 1) * sin(wave_chars(3, 2) * time + wave_chars(3, 3)), 'r')
+    figure(K);
+    hold on;
+    plot(time, wave_chars(1, 1) * sin(wave_chars(1, 2) * time + wave_chars(1, 3)), 'b')
+    plot(time, wave_chars(2, 1) * sin(wave_chars(2, 2) * time + wave_chars(2, 3)), 'm')
+    plot(time, wave_chars(3, 1) * sin(wave_chars(3, 2) * time + wave_chars(3, 3)), 'r')
 end
