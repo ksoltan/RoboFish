@@ -4,6 +4,22 @@ function tests = joint_deflection_tests
     tests = functiontests(localfunctions);
 end
 
+%% Test Get Deflection Pattern
+% Also not vigorously tested, only for one set
+function testGetDeflectionPatternLongFish(testCase)
+   correct = [2.0000, 0.0631, 49.9999; 3.0000, 0.0445, 23.7338; 1.0000, 0.0591, 41.1297];
+   long_fish_joints = [6.28, 4.796, 4.28, 7.219];
+   verifyLessThan(testCase, abs(correct - get_deflection_pattern(long_fish_joints)), 0.001); 
+end
+
+%% Test Generate Deflection Sequence
+% Is not rigorously tested
+function testGenerateDeflectionSequenceLongFish(testCase)
+   correct = [41.1297, 18.8307, 1.5510; 49.9999, 18.8307, -2.7796; 23.7338, 18.8307, 2.6647];
+   long_fish_joints = [6.28, 4.796, 4.28, 7.219];
+   verifyLessThan(testCase, abs(correct - generate_deflection_sequence(long_fish_joints)), 0.001);
+end
+
 %% Test Get All Deflection Angles
 function testGetAllDeflectionAngles(testCase)
     j_points1 = [[-sqrt(3)/2, -1/2];[0, 0];[sqrt(2), sqrt(2)]];
