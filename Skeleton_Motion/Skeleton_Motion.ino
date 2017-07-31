@@ -1,41 +1,11 @@
-const int NUM_JOINTS = 4;
-uint8_t joint_to_move = 0; // 0-head, 1-joint2, 2-joint3, 3-tail
-uint8_t joint_directions = B0000; // all heads start pointing in left direction (tail, joint3, joint2, head)
-uint8_t LEFT = 0;
-uint8_t RIGHT = 1;
+#include "Skeleton.h"
 
-// ARDUINO PINS FOR MICs
-uint8_t head_r = 3;
-uint8_t head_l = 5;
-uint8_t joint2_r = 6;
-uint8_t joint2_l = 9;
-uint8_t joint3_r = 10;
-uint8_t joint3_l = 11;
-uint8_t tail_r = 16; // A2
-uint8_t tail_l = 17; // A3
-//uint8_t joint_pins[NUM_JOINTS][2] = {{joint3_l, joint3_r}, {tail_l, tail_r}};
-uint8_t joint_pins[NUM_JOINTS][2] = {{head_l, head_r}, {joint2_l, joint2_r}, {joint3_l, joint3_r}, {tail_l, tail_r}};
-uint8_t LED = 13;
-
-void setup()
-{
-  // ARM MOTORS
-  pinMode(tail_l, OUTPUT);
-  pinMode(tail_r, OUTPUT);
-  pinMode(LED, OUTPUT);
-  Serial.begin(9600);
-}
-
-
+Skeleton Fish;
 // MAIN LOOP DEFINING THE ROBOTS BEHAVIOR
 void loop()
 {
-  static uint32_t last_changed = 0;
-  if (millis() - last_changed > 125) {
-    moveNextJoint();
-    last_changed = millis();
-    joint_to_move = (joint_to_move + 1) % NUM_JOINTS; // make it loop back from 3 to 0.
-  }
+  Fish.UpdateJoints();
+  delay(1);
 }
 
 void flap(int dir, int duty) {
