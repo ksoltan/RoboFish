@@ -1,11 +1,11 @@
 function wave_chars = generate_deflection_sequence(joint_lengths)
-    joint_variables();
+    K = length(joint_lengths);
     fs = 1 / 0.007; % how many points are we getting per second
     time = 0 : 1 / fs: 1;
     len_time = length(time);
     all_deflection_angles = zeros(len_time, K - 1);
     wave_chars = zeros(K - 1, 3); % Amplitude, frequency, phase
-    plot_bool = false;
+    plot_bool = true;
     % Get all deflection angles
     for i = 1 : len_time
         t = time(i);

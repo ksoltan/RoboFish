@@ -5,7 +5,7 @@ function joint_points = discretize_posture(joint_lengths, t, error_func, posture
 
 %% May need to take this out if calling in joint_deflection and it also initializes globals
  % Initialize global variables
-joint_variables;
+K = length(joint_lengths);
 %%
 joint_points = zeros(K + 1, 2); % K joints, K end points + 1 base point (0, 0)
 

@@ -9,11 +9,12 @@ function joint_deflection()
     figure;
     hold on;
     axis([0, 1, -0.8, 0.8])
-    joint_variables;
+    joint_lengths = [0.05, 0.05, 0.05, 0.05];
+    K = length(joint_lengths);
     joint_angles = zeros(K, 1);
     
     for t = 0 : 0.01 : 1.4
-        joint_points = discretize_posture([0.05, 0.05, 0.05, 0.05], t, @mean_error, @get_posture);
+        joint_points = discretize_posture(joint_lengths, t, @mean_error, @get_posture);
         base = joint_points(1, :);
         for i = 2 : length(joint_points)
             end_pt = joint_points(i, :);

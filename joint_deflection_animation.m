@@ -11,14 +11,15 @@ function joint_deflection_animation()
 clear all;
 clc;
 % Length and resolution of animation
-joint_variables;
+joint_lengths = [24.55, 26.1, 25, 25];
+K = length(joint_lengths);
 time = 0 : 0.007: 1;
 hFigure = figure;
 numberOfFrames = length(time);
 all_deflection_angles = zeros(numberOfFrames, K - 1);
 
 saveMovie = false;% Set to true if you want to save an avi file. Don't forget to change name of file
-movie_file_name = 'test_subplot2.avi';
+movie_file_name = 'small_fish_first_approximation.avi';
 
 % Set up the movie structure.
 % Preallocate recalledMovie, which will be an array of structures.
@@ -44,22 +45,22 @@ set(gcf, 'renderer', 'zbuffer');
 	
 for frameIndex = 1 : numberOfFrames
 	t = time(frameIndex);
-	joint_points = discretize_posture([6.28, 4.796, 4.28, 7.219], t, @mean_error, @get_posture);
+	joint_points = discretize_posture(joint_lengths, t, @mean_error, @get_posture);
     all_deflection_angles(frameIndex, :) = get_all_deflection_angles(joint_points);
 %     joint_points2 = discretize_posture([6.28, 4.796, 4.28, 7.219], t, @root_mean_square_error, @get_posture);
-    xs = 0 : 0.001 : 20;
+    xs = 0 : 0.001 : floor(sum(joint_lengths));
     cla reset;
 	% Enlarge figure to full screen.
 % 	set(gcf, 'Units', 'Normalized', 'Outerposition', [0, 0, 1, 1]);
+%     
+%     subplot(1, 2, 2);
+%     hold on;
+%     plot(time(1:frameIndex), all_deflection_angles(1:frameIndex, 1), 'b-')
+%     plot(time(1:frameIndex), all_deflection_angles(1:frameIndex, 2), 'm-')
+%     plot(time(1:frameIndex), all_deflection_angles(1:frameIndex, 3), 'r-')
+%     axis([0, time(end), -60, 60])
     
-    subplot(1, 2, 2);
-    hold on;
-    plot(time(1:frameIndex), all_deflection_angles(1:frameIndex, 1), 'b-')
-    plot(time(1:frameIndex), all_deflection_angles(1:frameIndex, 2), 'm-')
-    plot(time(1:frameIndex), all_deflection_angles(1:frameIndex, 3), 'r-')
-    axis([0, time(end), -60, 60])
-    
-    subplot(1, 2, 1);
+%     subplot(1, 2, 1);
     hold on;
     postures = plot(xs, get_posture(xs, t), 'b', 'DisplayName','Posture Func');
     
@@ -88,7 +89,7 @@ for frameIndex = 1 : numberOfFrames
     joint2 = plot(joint_points(3, 1), joint_points(3, 2), 'm.', 'MarkerSize', 30, 'DisplayName','Joint 2');
     joint3 = plot(joint_points(4, 1), joint_points(4, 2), 'r.', 'MarkerSize', 30, 'DisplayName','Joint 3');
 %     legend([postures, hinges, head, joint2, joint3])
-    axis([0, 25, -20, 20])
+    axis([0, 100, -50, 50])
 %     axis off
     daspect([3 3 1])
 %     plot(joint_points2(:, 1), joint_points2(:, 2), 'g*-');

@@ -1,11 +1,11 @@
 % Get the best sinusoid function for a set of linkage lengths
-    joint_variables;
+    
     all_ks = 1 : 0.5 : 10;
     all_omegas = 1 : 0.5 : 10;
 
     max_joint_angles = zeros(length(all_ks), length(all_omegas));
     lengths = [0.5, 0.5, 0.5, 0.5];
-    
+    K = length(lengths);
     
     for idx_k = 1 : length(all_ks)
         for idx_omega = 1 : length(all_omegas)
