@@ -1,7 +1,7 @@
 // Define all global variables for the skeleton, including pin numbers and initializing output/input on the pins
 #define NUM_JOINTS 3 // aka Propulsors
-uint8_t joint_to_move = 0; // 0-head, 1-joint2, 2-joint3, 3-tail
-uint8_t joint_directions = B0000; // all heads start pointing in left direction (tail, joint3, joint2, head)
+uint8_t joint_to_move = 0; // 0-head, 1-joint2, 2-joint3/tail
+uint8_t joint_directions = B000; // all heads start pointing in left direction (tail, joint3, joint2, head)
 #define LEFT 0
 #define RIGHT 1
 

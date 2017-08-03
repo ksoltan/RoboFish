@@ -71,7 +71,7 @@ void moveNextJoint() {
   // Assuming that all joint movement right now is just bang bang
   // in the opposite direction of where they were
   // Get current joint direction
-  int curr_dir = (joint_directions >> joint_to_move) & 1;  
+  int curr_dir = (joint_directions >> joint_to_move) & 1;
   // flap fin in opposite direction, currently at full amplitude
   flap(1 - curr_dir, 100);
   // update the joint's direction. Current joint to move is updated in loop.
