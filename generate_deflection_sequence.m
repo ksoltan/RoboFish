@@ -1,15 +1,16 @@
-function wave_chars = generate_deflection_sequence(joint_lengths)
+% Returns [amplitude, freq, phase]
+function wave_chars = generate_deflection_sequence(joint_lengths, posture_func)
     K = length(joint_lengths);
     fs = 1 / 0.007; % how many points are we getting per second
     time = 0 : 1 / fs: 1;
     len_time = length(time);
     all_deflection_angles = zeros(len_time, K - 1);
     wave_chars = zeros(K - 1, 3); % Amplitude, frequency, phase
-    plot_bool = true;
+    plot_bool = false;
     % Get all deflection angles
     for i = 1 : len_time
         t = time(i);
-        joint_points = discretize_posture(joint_lengths, t, @mean_error, @get_posture);
+        joint_points = discretize_posture(joint_lengths, t, @mean_error, posture_func);
         all_deflection_angles(i, :) = get_all_deflection_angles(joint_points);
     end
 
@@ -63,11 +64,15 @@ function wave_chars = generate_deflection_sequence(joint_lengths)
     if(plot_bool)
         figure(K);
         hold on;
-        plot(time, wave_chars(1, 1) * cos(wave_chars(1, 2) * time + wave_chars(1, 3)), 'b')
-        plot(time, all_deflection_angles(:, 1),'y')
-        plot(time, wave_chars(2, 1) * cos(wave_chars(2, 2) * time + wave_chars(2, 3)), 'm')
-        plot(time, all_deflection_angles(:, 2),'g')
-        plot(time, wave_chars(3, 1) * cos(wave_chars(3, 2) * time + wave_chars(3, 3)), 'r')
-        plot(time, all_deflection_angles(:, 3))
+        set(gca,'FontSize',12, 'FontName', 'Times'); % Set axis to times, 12
+        plot(time, wave_chars(1, 1) * cos(wave_chars(1, 2) * time + wave_chars(1, 3)), 'b', 'LineWidth', 2)
+        plot(time, all_deflection_angles(:, 1),'b:', 'LineWidth', 1.5)
+        plot(time, wave_chars(2, 1) * cos(wave_chars(2, 2) * time + wave_chars(2, 3)), 'm', 'LineWidth', 2)
+        plot(time, all_deflection_angles(:, 2),'m:', 'LineWidth', 1.5)
+        plot(time, wave_chars(3, 1) * cos(wave_chars(3, 2) * time + wave_chars(3, 3)), 'r', 'LineWidth', 2)
+        plot(time, all_deflection_angles(:, 3), 'r:', 'LineWidth', 1.5)
+        xlabel('Time (s)', 'FontSize', 14)
+        ylabel('Angular Deflection (deg)', 'FontSize', 14)
+        title('Joint Angular Deflection Approximation vs Original Over Time', 'FontSize', 18)
     end
 end

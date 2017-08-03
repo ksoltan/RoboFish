@@ -45,9 +45,9 @@ set(gcf, 'renderer', 'zbuffer');
 	
 for frameIndex = 1 : numberOfFrames
 	t = time(frameIndex);
-	joint_points = discretize_posture(joint_lengths, t, @mean_error, @get_posture);
+    % MAKE SURE TO CALL CORRECT GET POSTURE FUNCTION
+	joint_points = discretize_posture(joint_lengths, t, @mean_error, @get_posture_short_fish);
     all_deflection_angles(frameIndex, :) = get_all_deflection_angles(joint_points);
-%     joint_points2 = discretize_posture([6.28, 4.796, 4.28, 7.219], t, @root_mean_square_error, @get_posture);
     xs = 0 : 0.001 : floor(sum(joint_lengths));
     cla reset;
 	% Enlarge figure to full screen.

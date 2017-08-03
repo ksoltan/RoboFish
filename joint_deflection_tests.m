@@ -5,19 +5,27 @@ function tests = joint_deflection_tests
 end
 
 %% Test Get Deflection Pattern
-% Also not vigorously tested, only for one set
+% Also not vigorously tested, Checked against graph printed out in
+% deflection sequence to calculate times between peaks/troughs and the
+% order of the joints.
 function testGetDeflectionPatternLongFish(testCase)
-   correct = [2.0000, 0.0631, 49.9999; 3.0000, 0.0445, 23.7338; 1.0000, 0.0591, 41.1297];
+   correct = [3.0000, 0.1041, 43.7358; 1.0000, 0.0153, 41.1297; 2.0000, 0.0475, 52.5575];
    long_fish_joints = [6.28, 4.796, 4.28, 7.219];
-   verifyLessThan(testCase, abs(correct - get_deflection_pattern(long_fish_joints)), 0.001); 
+   verifyLessThan(testCase, abs(correct - get_deflection_pattern(long_fish_joints, @get_posture_long_fish)), 0.001); 
+end
+
+function testGetDeflectionPatternShortFish(testCase)
+   correct = [3.0000, 0.0726, 29.6189; 1.0000, 0.0247, 16.1928; 2.0000, 0.0695, 29.4735];
+   short_fish_joints = [24.55, 26.1, 25, 25];
+   verifyLessThan(testCase, abs(correct - get_deflection_pattern(short_fish_joints, @get_posture_short_fish)), 0.001); 
 end
 
 %% Test Generate Deflection Sequence
 % Is not rigorously tested
 function testGenerateDeflectionSequenceLongFish(testCase)
-   correct = [41.1297, 18.8307, 1.5510; 49.9999, 18.8307, -2.7796; 23.7338, 18.8307, 2.6647];
+   correct = [41.1297, 18.8307, 1.5510; 52.5575, 18.8307, -2.4853; 43.7358, 18.8307, 1.8386];
    long_fish_joints = [6.28, 4.796, 4.28, 7.219];
-   verifyLessThan(testCase, abs(correct - generate_deflection_sequence(long_fish_joints)), 0.001);
+   verifyLessThan(testCase, abs(correct - generate_deflection_sequence(long_fish_joints, @get_posture_long_fish)), 0.001);
 end
 
 %% Test Get All Deflection Angles
@@ -139,7 +147,7 @@ end
 
 function testSquareMeanError(testCase)
     worse = root_mean_square_error([0, 0], [pi/2, 1], 1, @get_posture);
-    best = root_mean_square_error([0, 0], [sqrt(1/2 + pi^2/8), sqrt(1/2 + pi^2/8)], 1, @get_posture);
+    best = root_mean_square_error([0, 0], [sqrt(1/2 + pi^2/8), sqrt(1/2 + pi^2/8)], 1, @get_posture_long_fish);
     verifyLessThan(testCase, best, worse)
 end
 
@@ -160,7 +168,7 @@ end
 
 function testRootMeanSquareError(testCase)
     worse = root_mean_square_error([0, 0], [pi/2, 1], 1, @get_posture);
-    best = root_mean_square_error([0, 0], [sqrt(1/2 + pi^2/8), sqrt(1/2 + pi^2/8)], 1, @get_posture);
+    best = root_mean_square_error([0, 0], [sqrt(1/2 + pi^2/8), sqrt(1/2 + pi^2/8)], 1, @get_posture_long_fish);
     verifyLessThan(testCase, best, worse)
 end
 
