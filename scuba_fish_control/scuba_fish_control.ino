@@ -12,12 +12,12 @@
 
 // Code for variable control of tail motion
 
-#define E2 12 // Enable Pin for motor 2
-#define I3 5 // Control pin 1 for motor 2
-#define I4 6 // Control pin 2 for motor 2
+//#define E2 12 // Enable Pin for motor 2
+#define I3 3 // Control pin 1 for motor 2
+#define I4 5 // Control pin 2 for motor 2
 
 void setup(){
-  pinMode(E2, OUTPUT);
+//  pinMode(E2, OUTPUT);
   pinMode(I3, OUTPUT);
   pinMode(I4, OUTPUT);
 }
@@ -30,7 +30,7 @@ void loop(){
   // left side
   int left_k = 0;
   for(int left_k; left_k <= 5; left_k = left_k + 1){
-    coil_pwm_3 = change_pwm_3 * left_k;
+    coil_pwm_3 = change_pwm * left_k;
     analogWrite(I3, coil_pwm_3);
     analogWrite(I4, 0);
     delay(65); // controls the frequency of the tail beat

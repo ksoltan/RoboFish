@@ -1,15 +1,19 @@
 // ARDUINO PINS FOR MICs
-int caudal_1 = 16; // A2
-int caudal_2 = 17; // A3
-int tail_r = 3;
-int tail_l = 5;
+//int caudal_1 = 16; // A2 For bang-bang/4th propulsor
+//int caudal_2 = 17; // A3
+int front_r = 3;
+int front_l = 5;
+int middle_l = 6;
+int middle_r = 9;
+int tail_l = 10;
+int tail_r = 11;
 int LED = 13;
 
 void setup()
 {
   // ARM MOTORS
-  pinMode(caudal_1, OUTPUT);
-  pinMode(caudal_2, OUTPUT);
+//  pinMode(caudal_1, OUTPUT);
+//  pinMode(caudal_2, OUTPUT);
   pinMode(LED, OUTPUT);
 }
 
@@ -35,17 +39,25 @@ void caudal_fin_function(int f)
 
   if (millis() > last_changed + f){
     if (dir){
+      analogWrite(front_r, 255);
+      analogWrite(front_l, 0);
+      analogWrite(middle_r, 255);
+      analogWrite(middle_l, 0);
       analogWrite(tail_r, 255);
       analogWrite(tail_l, 0);
-      digitalWrite(caudal_1, HIGH);
-      digitalWrite(caudal_2, LOW);
+//      digitalWrite(caudal_1, HIGH);
+//      digitalWrite(caudal_2, LOW);
       digitalWrite(LED, HIGH);
     }
     else{
+      analogWrite(front_r, 0);
+      analogWrite(front_l, 255);
+      analogWrite(middle_r, 0);
+      analogWrite(middle_l, 255);
       analogWrite(tail_r, 0);
       analogWrite(tail_l, 255);
-      digitalWrite(caudal_1, LOW);
-      digitalWrite(caudal_2, HIGH);
+//      digitalWrite(caudal_1, LOW);
+//      digitalWrite(caudal_2, HIGH);
       digitalWrite(LED, LOW);
     }
 

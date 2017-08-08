@@ -8,11 +8,11 @@
 // (peak, trough, peak), so set joint_directions to 010, instead of 000.
 
 const int NUM_JOINTS = 3;
-uint8_t joint_order[NUM_JOINTS] = {2, 0, 1}; // 2, 0, 1, 2, 0, 1, ...
+uint8_t joint_order[NUM_JOINTS] = {0, 1, 2}; // 2, 0, 1, 2, 0, 1, ...
 uint8_t joint_idx = 1; // idx in joint_order
 uint8_t joint_to_move = 0; // joint_order[joint_idx]
-uint8_t joint_directions = B011; // Pretend that joint2 already moved, before joint2 = B010
-float time_since_prev_joint[NUM_JOINTS] = {24.7, 6.95, 72.6}; //ms, order joints 0, 1, 2
+uint8_t joint_directions = B010; // Pretend that joint2 already moved, before joint2 = B010
+float time_since_prev_joint[NUM_JOINTS] = {68.2, 197.2, [235.1}; //ms, order joints 0, 1, 2
 uint8_t joint_duty[NUM_JOINTS] = {50, 100, 100}; // From amplitude, head looks about half of other joints
 uint8_t LEFT = 0;
 uint8_t RIGHT = 1;
@@ -61,8 +61,6 @@ void flap(int dir, int duty) {
 }
 
 void moveNextJoint() {
-  // Assuming that all joint movement right now is just bang bang
-  // in the opposite direction of where they were
   // Get current joint direction
   int curr_dir = (joint_directions >> joint_to_move) & 1;
   

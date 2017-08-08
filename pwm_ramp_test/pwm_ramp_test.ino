@@ -7,10 +7,14 @@ uint8_t head_l = 5;
 uint8_t LED = 13;
 
 uint8_t curr_dir = LEFT;
+float frequency = 0.5; //Hz
+float period = 1 / frequency;
 uint8_t max_duty = 80;
 uint8_t min_duty = 10;
 uint8_t change_amount = 10;
 uint8_t curr_duty = min_duty;
+//float time_change = period / 2 / ((max_duty - min_duty + 1) / change_amount);
+int time_change = 30;
 
 void setup()
 {
@@ -33,6 +37,7 @@ void loop()
     }
     curr_duty = min_duty;
   }
+  delay(time_change);
 }
 
 void flap() {
