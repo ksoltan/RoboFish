@@ -28,7 +28,7 @@ void loop()
   flap();
   // Update duty cycle
   curr_duty = curr_duty + change_amount;
-  if(curr_duty >= max_duty){
+  if(change_amount >= max_duty){
     // Switch direction and reset duty cycle
     if(curr_dir == LEFT){
       curr_dir = RIGHT;
