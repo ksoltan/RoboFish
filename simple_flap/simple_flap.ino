@@ -61,7 +61,6 @@ void caudal_fin_function(int f)
       digitalWrite(LED, LOW);
     }
 
-    dir = 1 - dir;
     last_changed = millis();
   }
 }

@@ -2,8 +2,8 @@ uint8_t LEFT = 0;
 uint8_t RIGHT = 1;
 
 // ARDUINO PINS FOR MICs
-uint8_t head_r = 3;
-uint8_t head_l = 5;
+uint8_t head_r = 10;
+uint8_t head_l = 11;
 uint8_t LED = 13;
 
 uint8_t curr_dir = LEFT;
