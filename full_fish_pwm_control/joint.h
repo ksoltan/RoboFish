@@ -46,7 +46,7 @@ class Joint {
     // time between samples in s
     float _sampling_period;
     int _current_sample = 0;
-    int _timer = 0;
+    unsigned long _timer = 0;
     int _curr_duty = 0;
     
     void set_pwm () {
@@ -56,11 +56,12 @@ class Joint {
       // then figure out if we're going left or right and set the appropriate pin
       if (_curr_duty < 0) {
         analogWrite(_pinL, -1*_curr_duty);
+        analogWrite(_pinR, 0);
       }
       else {
+        analogWrite(_pinL, 0);
         analogWrite(_pinR, _curr_duty);
       };
-      Serial.println(_curr_duty);
     };
     
 };
