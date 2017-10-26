@@ -1,3 +1,8 @@
+### 10/26/2017: Sean
+- Researching magnetic fields. [This site](https://www.allaboutcircuits.com/textbook/direct-current/chpt-15/magnetic-fields-and-inductance/) is super helpful to understand inductors.
+
+- [This site](http://dmr-physicsnotes.blogspot.com/2013/01/torque-on-bar-magnet-in-magnetic-field.html) claims the torque τ on a bar magnet in a uniform field is equal to MBsin(θ), so τ ∝ Bsin(θ). Need to do some checking on that result. We know B<sub>coil</sub> ∝ I, so we get τ ∝ Isin(θ). We want either I ∝ θ or V ∝ θ in some respect. So how is τ proportional to θ? Probably depends on the moment of inertia of the magnet. I'm going to go eat.
+
 ### 10/16/2017: Sean
 - Added full_fish_pwm_control to hinge_control branch; it's the fleshed out class-based fish. 
 
