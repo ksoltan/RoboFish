@@ -12,7 +12,7 @@ uint8_t joint_order[NUM_JOINTS] = {0, 1, 2}; // 2, 0, 1, 2, 0, 1, ...
 uint8_t joint_idx = 1; // idx in joint_order
 uint8_t joint_to_move = 0; // joint_order[joint_idx]
 uint8_t joint_directions = B010; // Pretend that joint2 already moved, before joint2 = B010
-float time_since_prev_joint[NUM_JOINTS] = {68.2, 197.2, [235.1}; //ms, order joints 0, 1, 2
+float time_since_prev_joint[NUM_JOINTS] = {68.2, 197.2, 235.1}; //ms, order joints 0, 1, 2
 uint8_t joint_duty[NUM_JOINTS] = {50, 100, 100}; // From amplitude, head looks about half of other joints
 uint8_t LEFT = 0;
 uint8_t RIGHT = 1;
@@ -71,4 +71,3 @@ void moveNextJoint() {
   // Add 0.5 to avoid rounding problem
   joint_directions = joint_directions ^ (uint8_t)(pow(2, joint_to_move) + 0.5);
 }
-
