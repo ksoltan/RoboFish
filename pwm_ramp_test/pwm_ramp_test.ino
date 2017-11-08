@@ -2,8 +2,8 @@ uint8_t LEFT = 0;
 uint8_t RIGHT = 1;
 
 // ARDUINO PINS FOR MICs
-uint8_t head_r = 3;
-uint8_t head_l = 5;
+uint8_t head_r = 10;
+uint8_t head_l = 11;
 uint8_t LED = 13;
 
 uint8_t curr_dir = LEFT;
@@ -31,7 +31,7 @@ void loop()
   flap();
   // Update duty cycle
   curr_duty = curr_duty + change_amount;
-  if(curr_duty >= max_duty){
+  if(change_amount >= max_duty){
     // Switch direction and reset duty cycle
     if(curr_dir == LEFT){
       curr_dir = RIGHT;

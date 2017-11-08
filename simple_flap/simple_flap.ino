@@ -8,6 +8,8 @@ int middle_r = 9;
 int tail_l = 10;
 int tail_r = 11;
 int LED = 13;
+uint32_t last_changed = 0;
+int dir = 0;
 
 void setup()
 {
@@ -21,47 +23,36 @@ void setup()
 // MAIN LOOP DEFINING THE ROBOTS BEHAVIOR
 void loop()
 {
-  static uint32_t last_changed = 0;
-
-  if (millis() < last_changed + 4000){
-    caudal_fin_function(1000);
-  }
-  else{
+  if (millis() - last_changed > 4000){
+    caudal_fin_function();
     last_changed = millis();
   }
 }
 
 // PROPULSION FUNCTIONS
-void caudal_fin_function(int f)
+void caudal_fin_function()
 {
-  static int dir = 0;
-  static uint32_t last_changed = 0;
-
-  if (millis() > last_changed + f){
-    if (dir){
-      analogWrite(front_r, 255);
-      analogWrite(front_l, 0);
-      analogWrite(middle_r, 255);
-      analogWrite(middle_l, 0);
-      analogWrite(tail_r, 255);
-      analogWrite(tail_l, 0);
+  if (dir==0){
+    analogWrite(front_r, 255);
+    analogWrite(front_l, 0);
+    analogWrite(middle_r, 255);
+    analogWrite(middle_l, 0);
+    analogWrite(tail_r, 255);
+    analogWrite(tail_l, 0);
 //      digitalWrite(caudal_1, HIGH);
 //      digitalWrite(caudal_2, LOW);
-      digitalWrite(LED, HIGH);
-    }
-    else{
-      analogWrite(front_r, 0);
-      analogWrite(front_l, 255);
-      analogWrite(middle_r, 0);
-      analogWrite(middle_l, 255);
-      analogWrite(tail_r, 0);
-      analogWrite(tail_l, 255);
+    digitalWrite(LED, HIGH);
+  }
+  else{
+    analogWrite(front_r, 0);
+    analogWrite(front_l, 255);
+    analogWrite(middle_r, 0);
+    analogWrite(middle_l, 255);
+    analogWrite(tail_r, 0);
+    analogWrite(tail_l, 255);
 //      digitalWrite(caudal_1, LOW);
 //      digitalWrite(caudal_2, HIGH);
-      digitalWrite(LED, LOW);
-    }
-
-    dir = 1 - dir;
-    last_changed = millis();
+    digitalWrite(LED, LOW);
   }
+  dir = (dir+1)%2;
 }
