@@ -1,3 +1,14 @@
+### 11/9/2017: Sean
+- Hooked head up to ammeter; the current flowing through each pair of coils is almost exactly a third of the total current the power supply is putting out. It looks like our H-bridges don't consume much of our power.
+
+- The new labeled wire set up is very handy!
+
+- Had to re-super-glue ~~one~~ two of the magnets. I don't think the super glue stands up very well to the water and torque. We should think about alternatives at some point. 
+
+- Specced out Hall Effect sensors, cable harnesses, etc.
+
+- Avenue to explore; is our AC reducing the power going through our coils? Is the inductor attenuating our input signal?
+
 ### 10/26/2017: Sean
 - Researching magnetic fields. [This site](https://www.allaboutcircuits.com/textbook/direct-current/chpt-15/magnetic-fields-and-inductance/) is super helpful to understand inductors.
 
