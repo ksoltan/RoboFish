@@ -2,11 +2,12 @@
 
 //array pin_pairs[] = [[3, 5], [6, 9], [10, 11]];
 //Joint joints[3];
-
-Joint j1(10, 11, .5, .5, 0);
+int left = 10;
+int right = 11;
+Joint j1(left, right, .5, .25, 0);
 
 class Skeleton {
-  
+
   public:
 
     Skeleton() {
@@ -21,4 +22,3 @@ class Skeleton {
 // method to update each joint
 
 // methods for different motions
-

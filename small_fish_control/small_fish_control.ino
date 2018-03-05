@@ -27,6 +27,10 @@ uint8_t joint3_l = 11;
 uint8_t joint_pins[NUM_JOINTS][2] = {{head_l, head_r}, {joint2_l, joint2_r}, {joint3_l, joint3_r}};
 uint8_t LED = 13;
 
+boolean startup_sequence = true;
+int startup_dir = LEFT;
+int startup_flap_times = 0;
+uint32_t last_changed = 0;
 void setup()
 {
   // ARM MOTORS
@@ -34,17 +38,42 @@ void setup()
   Serial.begin(9600);
 }
 
-
 // MAIN LOOP DEFINING THE ROBOTS BEHAVIOR
-void loop()
-{
+void loop(){
+  if(startup_sequence){
+    if (millis() - last_changed > 4000){
+      flap(startup_dir, 100);
+      last_changed = millis();
+      if(startup_flap_times + 1 >= 4){
+        if(joint_to_move + 1 >= NUM_JOINTS){
+          startup_sequence = false;
+          Serial.println("Startup Done");
+        }else{
+          joint_to_move++;
+          startup_flap_times = 0;
+          Serial.print("New joint: ");
+          Serial.print(joint_to_move);
+          Serial.print("\n");
+        }
+      }
+      else{
+        startup_flap_times++;
+        Serial.println("Flap");
+        startup_dir = (startup_dir+1)%2;
+      }
+    }
+    return;
+  }
+  
   static uint32_t last_changed = 0;
   if (millis() - last_changed > time_since_prev_joint[joint_to_move]) {
     moveNextJoint();
     last_changed = millis();
     joint_idx = (joint_idx + 1) % NUM_JOINTS; // make it loop back from 2 to 0.
     joint_to_move = joint_order[joint_idx];
+    printJointDir();
   }
+
 }
 
 void flap(int dir, int duty) {
@@ -71,3 +100,13 @@ void moveNextJoint() {
   // Add 0.5 to avoid rounding problem
   joint_directions = joint_directions ^ (uint8_t)(pow(2, joint_to_move) + 0.5);
 }
+
+void printJointDir(){
+  String all_dir = "";
+  for(int i = 0; i < NUM_JOINTS; i++){
+    int i_dir = (joint_directions >> i) & 1;
+    all_dir = all_dir + " " + i_dir;
+  }
+  Serial.println(all_dir);
+}
+

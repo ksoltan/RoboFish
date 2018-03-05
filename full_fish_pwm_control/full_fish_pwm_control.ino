@@ -9,6 +9,3 @@ void setup() {
 void loop() {
   s1.update_skeleton();
 }
-
-
-
