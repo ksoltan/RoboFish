@@ -58,6 +58,22 @@ int Joint::getCurrFlapNum(){
   return currFlapNum;
 }
 
+int Joint::getCurrDuty(){
+  return currDuty;
+}
+
+int Joint::getCurrDeadZone(){
+  return currDeadZone;
+}
+
+void Joint::setDuty(int duty){
+  currDuty = duty;
+}
+
+void Joint::setDeadZone(int deadZone){
+  currDeadZone = deadZone;
+}
+
 void Joint::LeftOnlyUpdate(){
   // Trick the program into thinking it has switched direction already, and keep it going left.
   lastUpdate = millis();

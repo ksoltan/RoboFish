@@ -6,10 +6,14 @@ class Joint{
     Joint(int leftPin, int rightPin, bool isPwmTest = false);
     void LeftOnlySet(int duty, int deadZone = 0, bool isPwmTest = true);
     void RightOnlySet(int duty, int deadZone = 0, bool isPwmTest = true);
-    void SimpleFlapSet(int duty, int deadZone, float frequency, bool isPwmTest);
+    void SimpleFlapSet(int duty, int deadZone, float frequency, bool isPwmTest = true);
     void Update();
     void SetPeriod(float frequency = 0.5);
     int getCurrFlapNum();
+    int getCurrDuty();
+    int getCurrDeadZone();
+    void setDuty(int duty);
+    void setDeadZone(int deadZone);
 
   private:
     enum flapMode { LEFT_ONLY, RIGHT_ONLY, SIMPLE_FLAP };
