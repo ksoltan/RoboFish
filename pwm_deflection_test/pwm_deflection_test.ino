@@ -25,7 +25,7 @@ void setup() {
 
 void loop() {
   if(curr_flap > num_flaps_per_duty){
-    updateDutyCycle();
+//    updateDutyCycle();
     curr_flap = 1;
   }
   flap();
@@ -70,9 +70,9 @@ void move_fin(){
 //  Serial.print(millis() - last_changed);
 //  Serial.print(".\n");
 //  Serial.print("Time percentage range:");
-//  Serial.print(curr_time_percentage * time_to_switch_dir / 100);
+//  Serial.print(curr_time_percentage / 100.0 * time_to_switch_dir);
 //  Serial.print(".\n");
-  if(millis() - last_changed <= curr_time_percentage * time_to_switch_dir / 100){ // Only supply pwm during time percentage
+  if(millis() - last_changed <= curr_time_percentage / 100.0 * time_to_switch_dir){ // Only supply pwm during time percentage
     if (dir) {
       Serial.println("RIGHT");
       analogWrite(head_r, pwm); // Set pwm to move right.
