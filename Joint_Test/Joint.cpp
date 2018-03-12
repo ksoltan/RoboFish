@@ -1,17 +1,17 @@
 #include <Arduino.h>
-#include "TestSuite.h"
+#include "Joint.h"
 
-TestSuite::TestSuite(int leftPin, int rightPin, bool isPwmTest = false) {
+Joint::Joint(int leftPin, int rightPin, bool isPwmTest = false) {
   pinMode(LED, OUTPUT);
   LeftPin = leftPin;
   RightPin = rightPin;
   lastUpdate = millis();
   isPwm = isPwmTest;
-  activeTest = SIMPLE_FLAP; // All parameters are set already to default values. No need to call set.
+  activeMode = SIMPLE_FLAP; // All parameters are set already to default values. No need to call set.
 }
 
-void TestSuite::SimpleFlapSet(int duty, int deadZone, float frequency, bool isPwmTest) {
-  activeTest = SIMPLE_FLAP;
+void Joint::SimpleFlapSet(int duty, int deadZone, float frequency, bool isPwmTest) {
+  activeMode = SIMPLE_FLAP;
   currDuty = duty;
   currDeadZone = deadZone;
   isPwm = isPwmTest;
@@ -20,20 +20,33 @@ void TestSuite::SimpleFlapSet(int duty, int deadZone, float frequency, bool isPw
   Serial.println("Set Simple Flap.");
 }
 
-void TestSuite::LeftOnlySet(int duty, bool isPwmTest = true){
+void Joint::LeftOnlySet(int duty, int deadZone = 0, bool isPwmTest = true){
   // Flap once to the left side. Meant to test the pwm signal.
-  activeTest = LEFT_ONLY;
+  activeMode = LEFT_ONLY;
   currDuty = duty;
   currDir = LEFT;
-  currDeadZone = 0;
+  currDeadZone = deadZone;
   isPwm = isPwmTest;
   Serial.println("Set Left Only.");
 }
 
-void TestSuite::Update() {
-  switch (activeTest) {
+void Joint::RightOnlySet(int duty, int deadZone = 0, bool isPwmTest = true){
+  // Flap once to the right side. Meant to test the pwm signal.
+  activeMode = RIGHT_ONLY;
+  currDuty = duty;
+  currDir = RIGHT;
+  currDeadZone = deadZone;
+  isPwm = isPwmTest;
+  Serial.println("Set Right Only.");
+}
+
+void Joint::Update() {
+  switch (activeMode) {
     case LEFT_ONLY:
       LeftOnlyUpdate();
+      break;
+    case RIGHT_ONLY:
+      RightOnlyUpdate();
       break;
     default:
       break;
@@ -41,22 +54,32 @@ void TestSuite::Update() {
   Flap();
 }
 
-void TestSuite::LeftOnlyUpdate(){
+int Joint::getCurrFlapNum(){
+  return currFlapNum;
+}
+
+void Joint::LeftOnlyUpdate(){
   // Trick the program into thinking it has switched direction already, and keep it going left.
   lastUpdate = millis();
   currDir = LEFT;
 }
 
-void TestSuite::SetPeriod(float frequency = 0.5) {
+void Joint::RightOnlyUpdate(){
+  // Trick the program into thinking it has switched direction already, and keep it going right.
+  lastUpdate = millis();
+  currDir = RIGHT;
+}
+
+void Joint::SetPeriod(float frequency = 0.5) {
   period = (int)(1 / frequency * 1000); // convert to ms.
 }
 
-void TestSuite::Flap() {
+void Joint::Flap() {
   UpdateFlapDir();
   UpdatePins();
 }
 
-void TestSuite::UpdateFlapDir() {
+void Joint::UpdateFlapDir() {
   // Update direction only if half a period has passed.
   if (millis() - lastUpdate >= period / 2) {
     // currDir = 1 - currDir;
@@ -71,7 +94,7 @@ void TestSuite::UpdateFlapDir() {
   }
 }
 
-void TestSuite::UpdatePins() {
+void Joint::UpdatePins() {
   if (millis() - lastUpdate <= period / 2 * (100 - currDeadZone) / 100) {
     int pwm = isPwm ? (int)(255 * currDuty / 100) : 0; // calculate pwm if needed
     if (currDir == RIGHT) {
@@ -89,4 +112,3 @@ void TestSuite::UpdatePins() {
     digitalWrite(LeftPin, LOW);
   }
 }
-

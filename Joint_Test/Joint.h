@@ -1,19 +1,21 @@
-#ifndef Test_Suite_H
-#define Test_Suite_H
+#ifndef Joint_H
+#define Joint_H
 
-class TestSuite{
+class Joint{
   public:
-    TestSuite(int leftPin, int rightPin, bool isPwmTest = false);
+    Joint(int leftPin, int rightPin, bool isPwmTest = false);
+    void LeftOnlySet(int duty, int deadZone = 0, bool isPwmTest = true);
+    void RightOnlySet(int duty, int deadZone = 0, bool isPwmTest = true);
     void SimpleFlapSet(int duty, int deadZone, float frequency, bool isPwmTest);
-    void LeftOnlySet(int duty, bool isPwmTest = true);
     void Update();
     void SetPeriod(float frequency = 0.5);
-    
+    int getCurrFlapNum();
+
   private:
-    enum testType { LEFT_ONLY, SIMPLE_FLAP, DUTY_SWEEP, DEAD_ZONE_SWEEP };
+    enum flapMode { LEFT_ONLY, RIGHT_ONLY, SIMPLE_FLAP };
     enum dir {RIGHT, LEFT};
 
-    testType  activeTest;
+    flapMode  activeMode;
 
     // Joint pin settings
     int LeftPin;
@@ -32,12 +34,12 @@ class TestSuite{
 
     // Dead Zone settings
     int currDeadZone = 0; // dead zone is percent of period.
-    
+
     // Flap Update Functions
     void Flap();
     void UpdateFlapDir();
     void UpdatePins();
     void LeftOnlyUpdate();
+    void RightOnlyUpdate();
 };
-#endif // Test_Suite_H
-
+#endif // Joint_H
