@@ -35,7 +35,6 @@ class TestSuite {
     void BasicUpdate();
     void DutySweepUpdate();
     void DeadZoneSweepUpdate();
-
-
 };
 #endif // TestSuite_H
+

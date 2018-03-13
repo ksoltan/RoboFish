@@ -1,10 +1,10 @@
 #include <Arduino.h>
 #include "TestSuite.h"
 
-#define LEFT_PIN 3
+#define LEFT_PIN 6
 #define RIGHT_PIN 5
 TestSuite::TestSuite() : Joint1(LEFT_PIN, RIGHT_PIN) {
-  BasicSet(50, 0, 2);
+  BasicSet(40, 50, 1);
 }
 
 void TestSuite::BasicSet(int duty, int deadZone, float frequency, int flapsPerSetting = 10) {
@@ -50,7 +50,7 @@ void TestSuite::DeadZoneSweepSet(int duty, int minDeadZone, int maxDeadZone, int
 void TestSuite::Update() {
   switch (activeTest) {
     case BASIC:
-      BasicUpdate();
+//      BasicUpdate();
       break;
     case DUTY_SWEEP:
       DutySweepUpdate();
@@ -115,3 +115,4 @@ void TestSuite::DeadZoneSweepUpdate() {
     Serial.print(".\n");
   }
 }
+

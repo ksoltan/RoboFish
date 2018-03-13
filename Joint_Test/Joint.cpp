@@ -88,6 +88,9 @@ void Joint::RightOnlyUpdate(){
 
 void Joint::SetPeriod(float frequency = 0.5) {
   period = (int)(1 / frequency * 1000); // convert to ms.
+  Serial.print("Set period to ");
+  Serial.print(period);
+  Serial.println(".\n");
 }
 
 void Joint::Flap() {
@@ -106,7 +109,7 @@ void Joint::UpdateFlapDir() {
     }
     lastUpdate = millis();
     currFlapNum++;
-    Serial.println("Flap.");
+    Serial.println(lastUpdate);
   }
 }
 
@@ -128,3 +131,4 @@ void Joint::UpdatePins() {
     digitalWrite(LeftPin, LOW);
   }
 }
+
