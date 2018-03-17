@@ -11,7 +11,6 @@ void TestSuite::BasicSet(int duty, int deadZone, float frequency, int flapsPerSe
   activeTest = BASIC;
   MaxDuty = duty;
   MaxDeadZone = deadZone;
-  Frequency = frequency;
   TimePerSetting = flapsPerSetting * 1 / frequency * 1000;
   lastUpdate = millis();
   currNumFlaps = 0;
@@ -25,7 +24,6 @@ void TestSuite::DutySweepSet(int minDuty, int maxDuty, int dutyInterval, int dea
   MaxDuty = maxDuty;
   DutyInterval = dutyInterval;
   MaxDeadZone = deadZone;
-  Frequency = frequency;
   TimePerSetting = flapsPerSetting * 1 / frequency * 1000;
   lastUpdate = millis();
   currNumFlaps = 0;
@@ -39,12 +37,26 @@ void TestSuite::DeadZoneSweepSet(int duty, int minDeadZone, int maxDeadZone, int
   MinDeadZone = minDeadZone;
   MaxDeadZone = maxDeadZone;
   DeadZoneInterval = deadZoneInterval;
-  Frequency = frequency;
   TimePerSetting = flapsPerSetting * 1 / frequency * 1000;
   lastUpdate = millis();
   currNumFlaps = 0;
   Joint1.SimpleFlapSet(duty, minDeadZone, frequency);
   Serial.println("Set Dead Zone Sweep.");
+}
+
+void TestSuite::FrequencySweepSet(int duty, int deadZone, float minFrequency, float maxFrequency, float frequencyInterval, int flapsPerSetting = 10){
+  activeTest = FREQUENCY_SWEEP;
+  MaxDuty = duty;
+  MaxDeadZone = deadZone;
+  MinFrequency = minFrequency;
+  MaxFrequency = maxFrequency;
+  FrequencyInterval = frequencyInterval;
+//  TimePerSetting = flapsPerSetting * 1 / minFrequency * 1000;
+  TimePerSetting = 5000; // 5s per frequency
+  lastUpdate = millis();
+  currNumFlaps = 0;
+  Joint1.SimpleFlapSet(duty, deadZone, minFrequency);
+  Serial.println("Set Frequency Sweep.");
 }
 
 void TestSuite::Update() {
@@ -58,6 +70,9 @@ void TestSuite::Update() {
     case DEAD_ZONE_SWEEP:
       DeadZoneSweepUpdate();
       break;
+    case FREQUENCY_SWEEP:
+      FrequencySweepUpdate();
+      break;
     default:
       break;
   }
@@ -69,7 +84,7 @@ void TestSuite::BasicUpdate() {
     currNumFlaps++;
     switch (currNumFlaps % 3) {
       case 0:
-        Joint1.SimpleFlapSet(MaxDuty, MaxDeadZone, Frequency);
+        Joint1.SimpleFlapSet(MaxDuty, MaxDeadZone, MaxFrequency);
         break;
       case 1:
         Joint1.LeftOnlySet(MaxDuty, MaxDeadZone);
@@ -116,3 +131,18 @@ void TestSuite::DeadZoneSweepUpdate() {
   }
 }
 
+void TestSuite::FrequencySweepUpdate() {
+  if (millis() - lastUpdate > TimePerSetting) {
+    // Update deadZone
+    float currFrequency = Joint1.getCurrFrequency();
+    if (currFrequency >= MaxFrequency) {
+      Joint1.setPeriod(MinFrequency);
+    } else {
+      Joint1.setPeriod(currFrequency + FrequencyInterval);
+    }
+    lastUpdate = millis();
+    Serial.print("Frequency = ");
+    Serial.print(Joint1.getCurrFrequency());
+    Serial.print(".\n");
+  }
+}

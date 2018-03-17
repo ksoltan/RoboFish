@@ -8,12 +8,14 @@ class Joint{
     void RightOnlySet(int duty, int deadZone = 0, bool isPwmTest = true);
     void SimpleFlapSet(int duty, int deadZone, float frequency, bool isPwmTest = true);
     void Update();
-    void SetPeriod(float frequency = 0.5);
+
     int getCurrFlapNum();
     int getCurrDuty();
     int getCurrDeadZone();
+    float getCurrFrequency();
     void setDuty(int duty);
     void setDeadZone(int deadZone);
+    void setPeriod(float frequency= 0.5);
 
   private:
     enum flapMode { LEFT_ONLY, RIGHT_ONLY, SIMPLE_FLAP };
@@ -47,4 +49,3 @@ class Joint{
     void RightOnlyUpdate();
 };
 #endif // Joint_H
-

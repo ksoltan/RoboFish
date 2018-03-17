@@ -16,7 +16,7 @@ void Joint::SimpleFlapSet(int duty, int deadZone, float frequency, bool isPwmTes
   currDeadZone = deadZone;
   isPwm = isPwmTest;
   currFlapNum = 1;
-  SetPeriod(frequency);
+  setPeriod(frequency);
   Serial.println("Set Simple Flap.");
 }
 
@@ -66,12 +66,23 @@ int Joint::getCurrDeadZone(){
   return currDeadZone;
 }
 
+float Joint::getCurrFrequency(){ // CHECK THIS
+  return 1.0 / period * 1000;
+}
+
 void Joint::setDuty(int duty){
   currDuty = duty;
 }
 
 void Joint::setDeadZone(int deadZone){
   currDeadZone = deadZone;
+}
+
+void Joint::setPeriod(float frequency = 0.5) {
+  period = (int)(1 / frequency * 1000); // convert to ms.
+  Serial.print("Set period to ");
+  Serial.print(period);
+  Serial.println(".\n");
 }
 
 void Joint::LeftOnlyUpdate(){
@@ -84,13 +95,6 @@ void Joint::RightOnlyUpdate(){
   // Trick the program into thinking it has switched direction already, and keep it going right.
   lastUpdate = millis();
   currDir = RIGHT;
-}
-
-void Joint::SetPeriod(float frequency = 0.5) {
-  period = (int)(1 / frequency * 1000); // convert to ms.
-  Serial.print("Set period to ");
-  Serial.print(period);
-  Serial.println(".\n");
 }
 
 void Joint::Flap() {
@@ -109,7 +113,7 @@ void Joint::UpdateFlapDir() {
     }
     lastUpdate = millis();
     currFlapNum++;
-    Serial.println(lastUpdate);
+    Serial.println("Flap.");
   }
 }
 
@@ -131,4 +135,3 @@ void Joint::UpdatePins() {
     digitalWrite(LeftPin, LOW);
   }
 }
-

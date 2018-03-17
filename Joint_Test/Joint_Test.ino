@@ -5,7 +5,7 @@ TestSuite testSuite;
 void setup()
 {
   Serial.begin(9600);
-  testSuite.DeadZoneSweepSet(20, 50, 90, 10, 1, 5);
+  testSuite.FrequencySweepSet(20, 30, 0.5, 3, 0.5);
 }
 
 void loop()
