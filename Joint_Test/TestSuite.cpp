@@ -52,7 +52,7 @@ void TestSuite::FrequencySweepSet(int duty, int deadZone, float minFrequency, fl
   MaxFrequency = maxFrequency;
   FrequencyInterval = frequencyInterval;
 //  TimePerSetting = flapsPerSetting * 1 / minFrequency * 1000;
-  TimePerSetting = 5000; // 5s per frequency
+  TimePerSetting = 8000; // 8s per frequency
   lastUpdate = millis();
   currNumFlaps = 0;
   Joint1.SimpleFlapSet(duty, deadZone, minFrequency);

@@ -13,9 +13,10 @@ class TestSuite {
     void Update();
 
   private:
+    // Define tests here:
     enum testType { BASIC, DUTY_SWEEP, DEAD_ZONE_SWEEP, FREQUENCY_SWEEP };
 
-    testType activeTest;
+    testType activeTest; // Points to current test being run.
     Joint Joint1; // Initialize in constructor
 
     // Duty parameters
