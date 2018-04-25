@@ -7,7 +7,9 @@ void setup()
   Serial.begin(9600);
   // Set test to be run here:
   // FrequencySweepSet(int duty, int deadZone, float minFrequency, float maxFrequency, float frequencyInterval, int flapsPerSetting = 10);
-  testSuite.FrequencySweepSet(80, 80, 1, 4, 1);
+  //BasicSet(int duty, int deadZone, float frequency, int flapsPerSetting = 10);
+    testSuite.BasicSet(80, 50, 2);
+//  testSuite.FrequencySet(80, 50,
 }
 
 void loop()
