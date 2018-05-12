@@ -7,15 +7,17 @@ class Joint{
     void LeftOnlySet(int duty, int deadZone = 0);
     void RightOnlySet(int duty, int deadZone = 0);
     void SimpleFlapSet(int duty, int deadZone, float frequency, float phase);
-    int Update(); // CAN BE VOID
+    int Update(); // CAN BE VOID, RETURNS INT FOR SERIAL PLOTTER VIS
 
     int getCurrFlapNum();
     int getCurrDuty();
     int getCurrDeadZone();
     float getCurrFrequency();
+
     void setDuty(int duty);
     void setDeadZone(int deadZone);
-    void setFrequency(float frequency= 0.5);
+    void setFrequency(float frequency = 0.5);
+    void setPhase(float phase = 0);
 
   private:
     enum flapMode { LEFT_ONLY, RIGHT_ONLY, SIMPLE_FLAP };
@@ -35,17 +37,13 @@ class Joint{
     long period = 1000;   // milliseconds. Period of whole sine wave.
     long lastUpdate; // last update of position.
 
-    // Duty settings
     int currDuty = 50;
-
-    // Dead Zone settings
     int currDeadZone = 0; // dead zone is percent of period.
-
-    float phaseOffset = 0;
+    float phaseOffset = 0; // in ms.
 
     // Flap Update Functions
-    int Flap(); // CAN BE VOID
-    int UpdateFlapDir(); // CAN BE VOID
+    int Flap(); // CAN BE VOID, RETURNS INT FOR SERIAL PLOTTER VIS
+    int UpdateFlapDir(); // CAN BE VOID, RETURNS INT FOR SERIAL PLOTTER VIS
     void UpdatePins();
     void LeftOnlyUpdate();
     void RightOnlyUpdate();

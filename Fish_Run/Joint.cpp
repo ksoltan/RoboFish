@@ -12,31 +12,29 @@ Joint::Joint(int leftPin, int rightPin, bool isPwmTest = true) {
 
 void Joint::SimpleFlapSet(int duty, int deadZone, float frequency, float phase) {
   activeMode = SIMPLE_FLAP;
-  currDuty = duty;
-  currDeadZone = deadZone;
-  phaseOffset = phase;
-  lastUpdate = millis() - phase;
-//  delay(phase); // Use delay if adding phase to lastUpdate.
-  currFlapNum = 1;
+  setDuty(duty);
+  setDeadZone(deadZone);
+  setPhase(phase);
   setFrequency(frequency);
+  currFlapNum = 1;
 //  Serial.println("Set Simple Flap.");
 }
 
 void Joint::LeftOnlySet(int duty, int deadZone = 0){
   // Flap once to the left side. Meant to test the pwm signal.
   activeMode = LEFT_ONLY;
-  currDuty = duty;
+  setDuty(duty);
+  setDeadZone(deadZone);
   currDir = LEFT;
-  currDeadZone = deadZone;
 //  Serial.println("Set Left Only.");
 }
 
 void Joint::RightOnlySet(int duty, int deadZone = 0){
   // Flap once to the right side. Meant to test the pwm signal.
   activeMode = RIGHT_ONLY;
-  currDuty = duty;
+  setDuty(duty);
+  setDeadZone(deadZone);
   currDir = RIGHT;
-  currDeadZone = deadZone;
 //  Serial.println("Set Right Only.");
 }
 
@@ -85,6 +83,16 @@ void Joint::setFrequency(float frequency = 0.5) {
 //  Serial.println(".\n");
 }
 
+void Joint::setPhase(float phase = 0) {
+  // Negative phase is equivalent to the period minus this offset.
+  if(phase < 0){
+    phase += period;
+  }
+
+  phaseOffset = phase;
+  lastUpdate = millis() - phase;
+}
+
 void Joint::LeftOnlyUpdate(){
   // Trick the program into thinking it has switched direction already, and keep it going left.
   lastUpdate = millis();
@@ -98,7 +106,7 @@ void Joint::RightOnlyUpdate(){
 }
 
 int Joint::Flap() {
-  int res = UpdateFlapDir();
+  int res = UpdateFlapDir(); // Returns whether the joint just switched direction (-1 or 1) or is still moving (0). For Serial plotter vis.
   UpdatePins();
   return res;
 }

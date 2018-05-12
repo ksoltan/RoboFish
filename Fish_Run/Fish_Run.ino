@@ -1,22 +1,22 @@
-#include "Joint.h"
+#include "Skeleton.h"
 
-// Skeleton fishSkeleton;
-Joint Joint1(3, 5);
-Joint Joint2(6, 10);
+ Skeleton fishSkeleton;
+// For generate_deflection_sequence([28, 26, 26, 28], @get_posture_short_fish)
+// Amplitude Frequency  Phase (ms)
+// 6.7606    5.9840    83.57  Joint1 (Head)
+// 18.4154   5.9840   -21.70  Joint2
+// 18.4154   5.9840    29.26  Joint3
 
 void setup()
 {
   Serial.begin(9600);
-  Joint1.SimpleFlapSet(100, 0, 4, 0);
-  Joint2.SimpleFlapSet(100, 0, 1, 50);
+  fishSkeleton.Joint1Set(50, 50, 4, 100);
+  fishSkeleton.Joint2Set(70, 40, 4, -50);
+  fishSkeleton.Joint3Set(100, 20, 4, 50);
 }
 
 void loop()
 {
   // Call the test update which will update the joint if needed
-  int res1 = Joint1.Update();
-  int res2 = Joint2.Update();
-  Serial.print(res1);
-  Serial.print(" ");
-  Serial.println(res2);
+  fishSkeleton.Update();
 }

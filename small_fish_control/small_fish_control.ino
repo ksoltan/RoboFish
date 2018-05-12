@@ -3,7 +3,7 @@
 //            3.0000, 0.0726, 29.6189
 //            1.0000, 0.0247, 16.1928
 //            2.0000, 0.0695, 29.4735
-// Joint order in Arduino: (2, 0, 1) since MATLAB indexes from 1
+// Joint order in Arduino: (2, 0, 1) instead of (3, 1, 2), since MATLAB indexes from 1
 // From short_fish_joint_motion_approx_vs_original.png, see that pattern is
 // (peak, trough, peak), so set joint_directions to 010, instead of 000.
 
@@ -64,7 +64,7 @@ void loop(){
     }
     return;
   }
-  
+
   static uint32_t last_changed = 0;
   if (millis() - last_changed > time_since_prev_joint[joint_to_move]) {
     moveNextJoint();
@@ -92,10 +92,10 @@ void flap(int dir, int duty) {
 void moveNextJoint() {
   // Get current joint direction
   int curr_dir = (joint_directions >> joint_to_move) & 1;
-  
+
   // flap fin in opposite direction of its current orientation
   flap(1 - curr_dir, joint_duty[joint_to_move]);
-  
+
   // update the joint's direction. Current joint to move is updated in loop.
   // Add 0.5 to avoid rounding problem
   joint_directions = joint_directions ^ (uint8_t)(pow(2, joint_to_move) + 0.5);
@@ -109,4 +109,3 @@ void printJointDir(){
   }
   Serial.println(all_dir);
 }
-

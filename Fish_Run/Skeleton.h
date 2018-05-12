@@ -3,6 +3,7 @@
 
 #include "Joint.h"
 
+// Configured to only swim straight. For turning, will need multiple states and memory of flap settings of each joint.
 class Skeleton {
   public:
     Skeleton();
@@ -10,11 +11,9 @@ class Skeleton {
     void Joint2Set(int duty, int deadZone, float frequency, float phase);
     void Joint3Set(int duty, int deadZone, float frequency, float phase);
     void Update();
+    //Add function that sets joint not to move.
 
   private:
-    // Define separate joints, initialize in constructor.
-    // HOW DO YOU SET THE PHASE OFFSET FOR A JOINT?
-    // - Addition to the compare value? Delay time?
     Joint Joint1;
     Joint Joint2;
     Joint Joint3;
