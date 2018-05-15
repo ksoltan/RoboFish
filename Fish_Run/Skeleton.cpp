@@ -36,12 +36,54 @@
   }
 
   void Skeleton::Update(){
+    //UpdateSkeleton();
     int res1 = Joint1.Update();
     int res2 = Joint2.Update();
     int res3 = Joint3.Update();
-    Serial.print(res1);
-    Serial.print(" ");
-    Serial.print(res2);
-    Serial.print(" ");
-    Serial.println(res3);
+//    Serial.print(res1);
+//    Serial.print(" ");
+//    Serial.print(res2);
+//    Serial.print(" ");
+//    Serial.println(res3);
   }
+
+  void Skeleton::UpdateSkeleton(){
+    if(millis() - timeLastUpdated > 3000){
+      timeLastUpdated = millis();
+      switch(random(3)){
+        case 0:
+          GoStraight();
+          break;
+        case 1:
+          TurnLeft();
+          break;
+        case 2:
+          TurnRight();
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
+void Skeleton::TurnLeft(){
+  Joint1.LeftOnlySet();
+  Joint2.LeftOnlySet();
+  Joint3.FlapSet();
+  Serial.println("Left Turn!");
+}
+
+void Skeleton::TurnRight(){
+  Joint1.FlapSet();
+  Joint2.RightOnlySet();
+  Joint3.RightOnlySet();
+  Serial.println("Right Turn!");
+}
+
+void Skeleton::GoStraight(){
+  // Set all joints back to flapping state.
+  Joint1.FlapSet();
+  Joint2.FlapSet();
+  Joint3.FlapSet();
+  Serial.println("Straight!");
+}

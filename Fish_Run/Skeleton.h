@@ -11,11 +11,16 @@ class Skeleton {
     void Joint2Set(int duty, int deadZone, float frequency, float phase);
     void Joint3Set(int duty, int deadZone, float frequency, float phase);
     void Update();
+    void TurnLeft();
+    void TurnRight();
+    void GoStraight();
     //Add function that sets joint not to move.
 
   private:
     Joint Joint1;
     Joint Joint2;
     Joint Joint3;
+    long timeLastUpdated = 0;
+    void UpdateSkeleton(); // Function to switch between turning and swimming straight.
 };
 #endif // Skeleton_H

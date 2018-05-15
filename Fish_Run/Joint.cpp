@@ -20,20 +20,20 @@ void Joint::SimpleFlapSet(int duty, int deadZone, float frequency, float phase) 
 //  Serial.println("Set Simple Flap.");
 }
 
-void Joint::LeftOnlySet(int duty, int deadZone = 0){
+void Joint::FlapSet(){
+  activeMode = SIMPLE_FLAP;
+}
+
+void Joint::LeftOnlySet(){
   // Flap once to the left side. Meant to test the pwm signal.
   activeMode = LEFT_ONLY;
-  setDuty(duty);
-  setDeadZone(deadZone);
   currDir = LEFT;
 //  Serial.println("Set Left Only.");
 }
 
-void Joint::RightOnlySet(int duty, int deadZone = 0){
+void Joint::RightOnlySet(){
   // Flap once to the right side. Meant to test the pwm signal.
   activeMode = RIGHT_ONLY;
-  setDuty(duty);
-  setDeadZone(deadZone);
   currDir = RIGHT;
 //  Serial.println("Set Right Only.");
 }

@@ -4,9 +4,10 @@
 class Joint{
   public:
     Joint(int leftPin, int rightPin, bool isPwmTest = true);
-    void LeftOnlySet(int duty, int deadZone = 0);
-    void RightOnlySet(int duty, int deadZone = 0);
     void SimpleFlapSet(int duty, int deadZone, float frequency, float phase);
+    void FlapSet();
+    void LeftOnlySet();
+    void RightOnlySet();
     int Update(); // CAN BE VOID, RETURNS INT FOR SERIAL PLOTTER VIS
 
     int getCurrFlapNum();
