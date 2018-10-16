@@ -10,8 +10,8 @@
 void setup()
 {
   Serial.begin(9600);
-  fishSkeleton.Joint1Set(50, 70, 3, -50);
-  fishSkeleton.Joint2Set(70, 40, 3, 70);
+  fishSkeleton.Joint1Set(70, 70, 3, -150);
+  fishSkeleton.Joint2Set(90, 20, 3, 70);
   fishSkeleton.Joint3Set(100, 20, 3, 20);
 //  fishSkeleton.TurnRight();
 }
