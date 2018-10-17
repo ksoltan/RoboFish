@@ -75,14 +75,14 @@ function getMultiJointedTrajectory()
             getCentroidMovie(strcat(myDir, '/', myFile));    
         else
             mCentroids = getAllCentroidData(strcat(myDir, '/', myFile));
-    %         angles = getAngularDisplacement(mCentroids);
-    %         makeAngularDisplacementPlot(angles, mCentroids.time);
+            angles = getAngularDisplacement(mCentroids);
+            makeAngularDisplacementPlot(angles, mCentroids.time);
     %         saveFigure(myFile, myDir, 1)
 %             vel = getVelocity(mCentroids);
 %             avg_speed = vel.avg_speed
 %             avg_speed_BL = vel.avg_speed_BL
 %             avg_angle = vel.avg_angle
-            makeVelocityPlot(mCentroids);
+%             makeVelocityPlot(mCentroids);
         end
     end
 
