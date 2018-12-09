@@ -23,9 +23,10 @@ void loop()
 {
   // Call the test update which will update the joint if needed
   fishSkeleton.Update();
+  Serial.print("Angle Sensor Values:");
   Serial.print(analogRead(A0));    
-  Serial.print(",");              //seperator
+  Serial.print(",");              //separator
   Serial.print(analogRead(A1));
-  Serial.print(",");              //seperator
+  Serial.print(",");              //separator
   Serial.println(analogRead(A2));
 }
